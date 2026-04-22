@@ -334,7 +334,7 @@ body{font-family:'Lato',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-
         <div class="table-head"><h6>All Reservations</h6></div>
         <div class="table-responsive">
           <table class="table mb-0">
-            <thead><tr><th>ID</th><th>Client</th><th>Casket</th><th>Service Date</th><th>Payment</th><th>Pay Status</th><th>Status</th><th>Edit/Cancel</th></tr></thead>
+            <thead><tr><th>ID</th><th>Client</th><th>Casket</th><th>Reserve Date</th><th>Service Date</th><th>Payment</th><th>Pay Status</th><th>Status</th><th>Edit/Cancel</th></tr></thead>
             <tbody id="reservationTable"></tbody>
           </table>
         </div>
@@ -633,6 +633,7 @@ body{font-family:'Lato',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-
           <div class="col-md-6"><label class="form-label-c">Retrieval Date &amp; Time</label><input type="datetime-local" class="form-ctrl" id="r_retrieval_datetime"/></div>
           <div class="col-md-6"><label class="form-label-c">Burial Schedule</label><input type="datetime-local" class="form-ctrl" id="r_burial_schedule"/></div>
           <div class="col-md-6"><label class="form-label-c">Burial Place</label><input type="text" class="form-ctrl" id="r_burial_place" placeholder="e.g. Davao Memorial Park, Ma-a"/></div>
+          <div class="col-md-6"><label class="form-label-c">Reserve Date</label><input type="date" class="form-ctrl" id="r_reserve_date"/></div>
           <div class="col-md-6"><label class="form-label-c">Casket</label>
             <select class="form-ctrl" id="r_casket"><option value="">— Select a casket —</option></select>
           </div>
@@ -1001,6 +1002,7 @@ function renderReservations(data) {
          '<div style="font-size:0.72rem;color:var(--muted);">' + r.phone + '</div>' +
          '<div style="font-family:monospace;font-size:0.68rem;color:var(--muted);">' + (r.payment_reference||'—') + '</div></td>' +
     '<td style="font-size:0.83rem;">' + (r.casket_name||'—') + (totalHtml) + '</td>' +
+    '<td style="font-size:0.83rem;">' + (r.reserve_date||'—') + '</td>' +
     '<td style="font-size:0.83rem;">' + (r.service_date||'—') + '</td>' +
     '<td>' + pmBadgeHtml + '</td>' +
     '<td>' + payBadge + '<div class="d-flex gap-1 mt-1">' + verifyBtn + '</div></td>' +
@@ -1051,6 +1053,7 @@ async function saveReservation() {
   const body = {
     fname, lname, email, phone,
     casket_name: document.getElementById('r_casket').value,
+    reserve_date: document.getElementById('r_reserve_date').value || null,
     service_date: document.getElementById('r_date').value || null,
     service_type: document.getElementById('r_type').value,
     notes: document.getElementById('r_notes').value,
