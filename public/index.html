@@ -986,6 +986,18 @@ footer{background:var(--navy-dark);color:rgba(255,255,255,0.6);padding:3rem 0 1.
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
+// ── TOKEN SANITIZER — runs immediately before any other logic ──
+// Clears any token that is expired, malformed, or stored under the wrong key.
+// This fixes browsers that still have stale pre-fix tokens in localStorage.
+(function sanitizeTokens() {
+  function getPayload(t) { try { return JSON.parse(atob(t.split('.')[1])); } catch(e) { return null; } }
+  function isExpired(p)  { return p.exp && Date.now() / 1000 > p.exp; }
+  var at = localStorage.getItem('er_admin_token');
+  if (at) { var ap = getPayload(at); if (!ap || isExpired(ap) || (ap.role !== 'admin' && ap.role !== 'superadmin')) localStorage.removeItem('er_admin_token'); }
+  var ct = localStorage.getItem('er_client_token');
+  if (ct) { var cp = getPayload(ct); if (!cp || isExpired(cp) || cp.role !== 'client') localStorage.removeItem('er_client_token'); }
+})();
+
 // ─── API CONFIG ──────────────────────────────────────────────────────────────
 // ── API BASE: auto-detects localhost vs live hosting ──────────
 const API_BASE = (() => {
