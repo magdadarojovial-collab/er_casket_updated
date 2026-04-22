@@ -6,6 +6,8 @@
 <title>Eternal Rest – Super Admin</title>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet"/>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet"/>
 <style>
 :root{
@@ -17,23 +19,7 @@
   --success:#4a7c59;--danger:#c0392b;--warning:#d97706;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'Lato',sans-serif;background:#f0f2f5;color:var(--text);display:flex;min-height:100vh;}
-
-/* LOGIN */
-.login-screen{position:fixed;inset:0;background:linear-gradient(135deg,#1a0533,#2d1060,#1c2b4a);display:flex;align-items:center;justify-content:center;z-index:9999;}
-.login-box{background:var(--white);border-radius:14px;padding:2.5rem;width:100%;max-width:420px;box-shadow:0 20px 60px rgba(0,0,0,0.4);}
-.login-logo{text-align:center;margin-bottom:2rem;}
-.login-logo .icon{width:70px;height:70px;background:linear-gradient(135deg,var(--purple),var(--purple-light));border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--white);font-size:1.8rem;margin:0 auto 1rem;}
-.login-logo h4{font-family:'Playfair Display',serif;color:var(--navy);font-size:1.5rem;}
-.login-logo p{font-size:0.8rem;color:var(--muted);letter-spacing:1px;text-transform:uppercase;}
-.form-ctrl{border:1.5px solid var(--border);border-radius:6px;padding:0.65rem 1rem;font-size:0.9rem;width:100%;outline:none;font-family:'Lato';transition:border 0.2s;background:var(--cream);}
-.form-ctrl:focus{border-color:var(--purple);background:var(--white);}
-.form-label-c{font-size:0.72rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--navy);margin-bottom:0.4rem;display:block;}
-.btn-login{background:linear-gradient(135deg,var(--purple),var(--purple-light));color:var(--white);border:none;border-radius:6px;padding:0.75rem;font-size:0.88rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;width:100%;cursor:pointer;transition:opacity 0.2s;}
-.btn-login:hover{opacity:0.9;}
-.login-access-denied{display:none;background:#fee2e2;border:1px solid #fca5a5;color:#991b1b;border-radius:8px;padding:1rem;text-align:center;margin-bottom:1rem;}
-.login-access-denied i{font-size:1.4rem;display:block;margin-bottom:0.4rem;}
-.superadmin-badge{display:inline-flex;align-items:center;gap:0.5rem;background:var(--purple-pale);border:1.5px solid var(--purple-light);color:var(--purple);border-radius:20px;padding:0.4rem 1rem;font-size:0.78rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:1.5rem;}
+body{font-family:'Lato',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f0f2f5;color:var(--text);display:flex;min-height:100vh;}
 
 /* SIDEBAR */
 .sidebar{width:var(--sidebar-w);background:linear-gradient(180deg,#1a0533,#2d1060 60%,var(--navy-dark));min-height:100vh;position:fixed;left:0;top:0;z-index:100;display:flex;flex-direction:column;transition:transform 0.3s;}
@@ -100,9 +86,28 @@ body{font-family:'Lato',sans-serif;background:#f0f2f5;color:var(--text);display:
 .btn-view2:hover{background:#ddd6fe;}
 .info-card{background:var(--white);border-radius:10px;border:1px solid var(--border);padding:1.3rem;}
 .info-card h6{font-family:'Playfair Display',serif;font-size:1rem;color:var(--navy);margin-bottom:1rem;}
-.modal-content{border-radius:10px;border:none;}
-.modal-header-c{background:linear-gradient(135deg,#1a0533,#2d1060);color:var(--white);padding:1.2rem 1.5rem;border:none;}
-.modal-header-c h5{font-family:'Playfair Display',serif;color:#c4b5fd;font-size:1.3rem;margin:0;}
+.modal-content{border-radius:14px;border:none;box-shadow:0 24px 80px rgba(0,0,0,0.22);}
+.modal-header-c{background:linear-gradient(135deg,#1a0533,#2d1060);color:var(--white);padding:1.2rem 1.6rem;border:none;border-radius:14px 14px 0 0;}
+.modal-header-c h5{font-family:'Playfair Display',serif;color:#c4b5fd;font-size:1.2rem;margin:0;}
+.modal-body-form{padding:1.6rem;}
+.form-section-title{font-size:0.68rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--purple);border-bottom:1px solid var(--purple-pale);padding-bottom:0.4rem;margin-bottom:1rem;display:flex;align-items:center;gap:0.5rem;}
+.form-section-title i{font-size:0.75rem;}
+.modal-footer-actions{padding:1rem 1.6rem;background:#f5f3fa;border-top:1px solid #e9e3f5;border-radius:0 0 14px 14px;display:flex;justify-content:flex-end;gap:0.6rem;}
+.btn-modal-save{background:linear-gradient(135deg,var(--purple),var(--purple-light));color:#fff;border:none;border-radius:7px;padding:0.65rem 1.6rem;font-size:0.85rem;font-weight:700;letter-spacing:0.5px;cursor:pointer;transition:opacity 0.2s,transform 0.1s;display:inline-flex;align-items:center;gap:0.5rem;}
+.btn-modal-save:hover{opacity:0.9;}
+.btn-modal-save:active{transform:scale(0.98);}
+.btn-modal-cancel{background:none;color:var(--muted);border:1.5px solid var(--border);border-radius:7px;padding:0.65rem 1.2rem;font-size:0.85rem;font-weight:600;cursor:pointer;transition:all 0.2s;}
+.btn-modal-cancel:hover{background:var(--border);color:var(--navy);}
+.field-hint{font-size:0.7rem;color:var(--muted);margin-top:0.25rem;}
+/* FORM CONTROLS */
+.form-ctrl{border:1.5px solid var(--border);border-radius:6px;padding:0.65rem 1rem;font-size:0.9rem;width:100%;outline:none;font-family:'Lato',sans-serif;transition:border 0.2s,box-shadow 0.2s;background:var(--cream);color:var(--text);}
+.form-ctrl:focus{border-color:var(--purple);background:var(--white);box-shadow:0 0 0 3px rgba(109,40,217,0.12);}
+.form-label-c{font-size:0.72rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--navy);margin-bottom:0.4rem;display:block;}
+.btn-login{background:linear-gradient(135deg,var(--purple),var(--purple-light));color:var(--white);border:none;border-radius:6px;padding:0.75rem 1.4rem;font-size:0.88rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:opacity 0.2s,transform 0.1s;display:inline-flex;align-items:center;gap:0.5rem;}
+.btn-login:hover{opacity:0.9;}
+.btn-login:active{transform:scale(0.98);}
+.btn-login:disabled{opacity:0.6;cursor:not-allowed;}
+
 .page-section{display:none;}
 .page-section.active{display:block;}
 .progress-custom{height:8px;border-radius:4px;background:var(--border);}
@@ -132,43 +137,6 @@ body{font-family:'Lato',sans-serif;background:#f0f2f5;color:var(--text);display:
 </style>
 </head>
 <body>
-
-<!-- ── LOGIN SCREEN ─────────────────────────────────────────── -->
-<div class="login-screen" id="loginScreen">
-  <div class="login-box">
-    <div class="login-logo">
-      <div class="icon"><i class="fas fa-crown"></i></div>
-      <h4>Eternal Rest</h4>
-      <p>Super Admin Portal</p>
-    </div>
-    <div class="text-center mb-3">
-      <span class="superadmin-badge"><i class="fas fa-shield-alt me-1"></i>Restricted Access</span>
-    </div>
-    <div class="login-access-denied" id="accessDenied">
-      <i class="fas fa-ban"></i>
-      <strong>Access Denied</strong>
-      <div style="font-size:0.82rem;margin-top:0.3rem;">This portal is restricted to Super Administrators only.</div>
-    </div>
-    <form onsubmit="doLogin();return false;" autocomplete="on">
-    <div class="mb-3">
-      <label class="form-label-c">Username</label>
-      <input type="text" class="form-ctrl" id="loginUser" placeholder="e.g. superadmin" autocomplete="username"/>
-    </div>
-    <div class="mb-3">
-      <label class="form-label-c">Password</label>
-      <div class="position-relative">
-        <input type="password" class="form-ctrl" id="loginPass" placeholder="Enter your password" style="padding-right:2.5rem;" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"/>
-        <button type="button" onclick="togglePass()" style="position:absolute;right:0.8rem;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--muted);cursor:pointer;"><i class="fas fa-eye" id="passEye"></i></button>
-      </div>
-    </div>
-    <div id="loginError" style="display:none;background:#fee2e2;color:#991b1b;border-radius:6px;padding:0.6rem 1rem;font-size:0.83rem;margin-bottom:1rem;"></div>
-    <button type="submit" class="btn-login"><i class="fas fa-sign-in-alt me-2"></i>Sign In</button>
-    </form>
-    <div class="text-center mt-3">
-      <a href="admin.html" style="font-size:0.8rem;color:var(--muted);text-decoration:none;"><i class="fas fa-arrow-left me-1"></i>Go to Admin Panel</a>
-    </div>
-  </div>
-</div>
 
 <!-- ── SIDEBAR ──────────────────────────────────────────────── -->
 <aside class="sidebar" id="sidebar">
@@ -819,19 +787,52 @@ body{font-family:'Lato',sans-serif;background:#f0f2f5;color:var(--text);display:
 
 <!-- ── MODALS ──────────────────────────────────────────────────── -->
 <!-- User Modal -->
-<div class="modal fade" id="userModal" tabindex="-1">
+<div class="modal fade" id="userModal" tabindex="-1" aria-modal="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header-c d-flex justify-content-between align-items-center">
-        <h5 id="userModalTitle">Add User</h5>
+        <h5 id="userModalTitle"><i class="fas fa-user-plus me-2" style="color:#c4b5fd;font-size:1rem;"></i>Add User</h5>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
       </div>
-      <div class="p-4">
+      <div class="modal-body-form">
+
+        <div class="form-section-title"><i class="fas fa-id-card"></i>Personal Information</div>
+        <div class="row g-3 mb-3">
+          <div class="col-md-6">
+            <label class="form-label-c">First Name *</label>
+            <input type="text" class="form-ctrl" id="u_fname" placeholder="e.g. Maria" maxlength="50" autocomplete="off" oninput="this.value=this.value.replace(/[^A-Za-zÀ-ÿ\s'\-\.]/g,'')"/>
+            <div class="invalid-feedback" id="err_u_fname"></div>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label-c">Last Name</label>
+            <input type="text" class="form-ctrl" id="u_lname" placeholder="e.g. Santos" maxlength="50" autocomplete="off" oninput="this.value=this.value.replace(/[^A-Za-zÀ-ÿ\s'\-\.]/g,'')"/>
+            <div class="invalid-feedback" id="err_u_lname"></div>
+          </div>
+        </div>
+
+        <div class="form-section-title"><i class="fas fa-at"></i>Account Credentials</div>
+        <div class="row g-3 mb-3">
+          <div class="col-12">
+            <label class="form-label-c">Username *</label>
+            <input type="text" class="form-ctrl" id="u_username" placeholder="e.g. msantos" maxlength="30" autocomplete="off" oninput="this.value=this.value.replace(/[^A-Za-z0-9_\-\.]/g,'').toLowerCase()"/>
+            <div class="invalid-feedback" id="err_u_username"></div>
+            <p class="field-hint">Letters, numbers, underscores, hyphens and dots only. No spaces.</p>
+          </div>
+          <div class="col-12">
+            <label class="form-label-c">Email *</label>
+            <input type="email" class="form-ctrl" id="u_email" placeholder="e.g. msantos@eternalrest.ph" maxlength="100" autocomplete="off"/>
+            <div class="invalid-feedback" id="err_u_email"></div>
+          </div>
+          <div class="col-12">
+            <label class="form-label-c">Temporary Password *</label>
+            <input type="text" class="form-ctrl" id="u_pass" placeholder="e.g. TempPass@2025" maxlength="64" autocomplete="new-password"/>
+            <div class="invalid-feedback" id="err_u_pass"></div>
+            <p class="field-hint">Min. 8 characters. Must include uppercase, lowercase, a number, and a special character.</p>
+          </div>
+        </div>
+
+        <div class="form-section-title"><i class="fas fa-shield-alt"></i>Role &amp; Branch</div>
         <div class="row g-3">
-          <div class="col-md-6"><label class="form-label-c">First Name *</label><input type="text" class="form-ctrl" id="u_fname" placeholder="e.g. Maria" maxlength="50" autocomplete="off" oninput="this.value=this.value.replace(/[^A-Za-zÀ-ÿ\s'\-\.]/g,'')"/><div class="invalid-feedback" id="err_u_fname"></div></div>
-          <div class="col-md-6"><label class="form-label-c">Last Name</label><input type="text" class="form-ctrl" id="u_lname" placeholder="e.g. Santos" maxlength="50" autocomplete="off" oninput="this.value=this.value.replace(/[^A-Za-zÀ-ÿ\s'\-\.]/g,'')"/><div class="invalid-feedback" id="err_u_lname"></div></div>
-          <div class="col-12"><label class="form-label-c">Username *</label><input type="text" class="form-ctrl" id="u_username" placeholder="e.g. msantos" maxlength="30" autocomplete="off" oninput="this.value=this.value.replace(/[^A-Za-z0-9_\-\.]/g,'').toLowerCase()"/><div class="invalid-feedback" id="err_u_username"></div><small class="text-muted" style="font-size:0.72rem;">Letters, numbers, underscores, hyphens and dots only. No spaces.</small></div>
-          <div class="col-12"><label class="form-label-c">Email *</label><input type="email" class="form-ctrl" id="u_email" placeholder="e.g. msantos@eternalrest.ph" maxlength="100" autocomplete="off"/><div class="invalid-feedback" id="err_u_email"></div></div>
           <div class="col-md-6">
             <label class="form-label-c">Role</label>
             <select class="form-ctrl" id="u_role" onchange="toggleBranchField()">
@@ -843,23 +844,26 @@ body{font-family:'Lato',sans-serif;background:#f0f2f5;color:var(--text);display:
             <label class="form-label-c">Assign Branch</label>
             <select class="form-ctrl" id="u_branch"></select>
           </div>
-          <div class="col-12"><label class="form-label-c">Temporary Password *</label><input type="text" class="form-ctrl" id="u_pass" placeholder="e.g. TempPass@2025" maxlength="64" autocomplete="new-password"/><div class="invalid-feedback" id="err_u_pass"></div><small class="text-muted" style="font-size:0.72rem;">Min. 8 characters. Must include uppercase, lowercase, a number, and a special character.</small></div>
         </div>
-        <button class="btn-login mt-3" onclick="saveUser()"><i class="fas fa-user-plus me-2"></i>Create User</button>
+
+      </div>
+      <div class="modal-footer-actions">
+        <button type="button" class="btn-modal-cancel" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn-modal-save" onclick="saveUser()"><i class="fas fa-user-plus me-1"></i>Create User</button>
       </div>
     </div>
   </div>
 </div>
 
 <!-- Branch Modal -->
-<div class="modal fade" id="branchModal" tabindex="-1">
+<div class="modal fade" id="branchModal" tabindex="-1" aria-modal="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header-c d-flex justify-content-between align-items-center">
         <h5 id="branchModalTitle">Add Branch</h5>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
       </div>
-      <div class="p-4">
+      <div class="modal-body-form">
         <div class="row g-3">
           <div class="col-12"><label class="form-label-c">Branch Name *</label><input type="text" class="form-ctrl" id="b_name" placeholder="e.g. Davao South Branch"/></div>
           <div class="col-12"><label class="form-label-c">Address</label><input type="text" class="form-ctrl" id="b_address" placeholder="e.g. 123 Rizal St., Brgy. Poblacion, Davao City"/></div>
@@ -867,7 +871,10 @@ body{font-family:'Lato',sans-serif;background:#f0f2f5;color:var(--text);display:
           <div class="col-md-6"><label class="form-label-c">Email</label><input type="email" class="form-ctrl" id="b_email" placeholder="e.g. davao.south@eternalrest.ph"/></div>
           <div class="col-12"><label class="form-label-c">Branch Manager</label><input type="text" class="form-ctrl" id="b_manager" placeholder="e.g. Juan dela Cruz"/></div>
         </div>
-        <button class="btn-login mt-3" onclick="saveBranch()"><i class="fas fa-building me-2"></i>Create Branch</button>
+      </div>
+      <div class="modal-footer-actions">
+        <button type="button" class="btn-modal-cancel" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn-modal-save" onclick="saveBranch()"><i class="fas fa-building me-1"></i>Create Branch</button>
       </div>
     </div>
   </div>
@@ -884,7 +891,6 @@ body{font-family:'Lato',sans-serif;background:#f0f2f5;color:var(--text);display:
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script>
 // ── API BASE: auto-detects localhost vs live hosting ──────────
@@ -909,78 +915,46 @@ async function apiFetch(path, opts = {}) {
 }
 
 let isLoggedIn   = false;
-let AUTH_TOKEN   = localStorage.getItem('er_sa_token') || null;
+let AUTH_TOKEN   = localStorage.getItem('er_admin_token') || null;
 let CURRENT_USER = null;
 let RESERVATIONS = [];
 let ALL_USERS    = [];
 let ALL_BRANCHES = [];
 
-// ── LOGIN ─────────────────────────────────────────────────────
-async function doLogin() {
-  const username = document.getElementById('loginUser').value.trim();
-  const password = document.getElementById('loginPass').value;
-  const errEl    = document.getElementById('loginError');
-  const deniedEl = document.getElementById('accessDenied');
-  errEl.style.display = 'none';
-  deniedEl.style.display = 'none';
+// ── AUTH — redirect to login.html if no valid token ──────────
+function doLogout() {
+  AUTH_TOKEN = null; CURRENT_USER = null;
+  localStorage.removeItem('er_admin_token');
+  window.location.href = 'login.html';
+}
 
-  if (!username || !password) {
-    errEl.textContent = 'Username and password are required.';
-    errEl.style.display = 'block';
+// ── SESSION RESTORE ───────────────────────────────────────────
+(async () => {
+  if (!AUTH_TOKEN) { window.location.href = 'login.html'; return; }
+  const result = await apiFetch('/auth/me');
+  if (!result.success) { localStorage.removeItem('er_admin_token'); window.location.href = 'login.html'; return; }
+  const role = result.user.role;
+  if (role !== 'superadmin') {
+    // Admin/staff landed here — redirect to the right panel
+    if (role === 'admin' || role === 'staff') { window.location.href = 'admin.html'; return; }
+    localStorage.removeItem('er_admin_token');
+    window.location.href = 'login.html';
     return;
   }
-
-  const result = await apiFetch('/auth/login', { method: 'POST', body: JSON.stringify({ username, password }) });
-
-  if (result.success) {
-    const role = result.user.role;
-    // If a branch admin logs in on superadmin.html, redirect them to their panel
-    if (role === 'admin' || role === 'staff') {
-      localStorage.setItem('er_admin_token', result.token);
-      window.location.href = 'admin.html';
-      return;
-    }
-    if (role !== 'superadmin') {
-      deniedEl.style.display = 'block';
-      document.getElementById('loginPass').value = '';
-      return;
-    }
-    AUTH_TOKEN   = result.token;
-    CURRENT_USER = result.user;
-    localStorage.setItem('er_sa_token', AUTH_TOKEN);
-    isLoggedIn = true;
-    document.getElementById('loginScreen').style.display = 'none';
-    const u = result.user;
-    const initials = (u.fname[0] + (u.lname[0]||'')).toUpperCase();
-    setUserUI(u.fname + ' ' + u.lname, initials);
-    initDashboard();
-  } else {
-    errEl.textContent = result.message || 'Invalid credentials.';
-    errEl.style.display = 'block';
-  }
-}
+  // Valid superadmin session — init panel
+  CURRENT_USER = result.user;
+  const u = CURRENT_USER;
+  const initials = (u.fname[0] + (u.lname[0]||'')).toUpperCase();
+  isLoggedIn = true;
+  setUserUI(u.fname + ' ' + u.lname, initials);
+  initDashboard();
+})();
 
 function setUserUI(name, initials) {
   document.getElementById('userAv').textContent    = initials;
   document.getElementById('topUserAv').textContent = initials;
   document.getElementById('userNameDisplay').textContent = name;
   document.getElementById('topUserName').textContent     = name.split(' ')[0];
-}
-
-function doLogout() {
-  AUTH_TOKEN = null; CURRENT_USER = null;
-  localStorage.removeItem('er_sa_token');
-  isLoggedIn = false;
-  document.getElementById('loginScreen').style.display = 'flex';
-  ['loginUser','loginPass'].forEach(id => document.getElementById(id).value = '');
-  ['loginError','accessDenied'].forEach(id => document.getElementById(id).style.display = 'none');
-}
-
-function togglePass() {
-  const inp = document.getElementById('loginPass');
-  const icon = document.getElementById('passEye');
-  inp.type = inp.type === 'password' ? 'text' : 'password';
-  icon.className = inp.type === 'password' ? 'fas fa-eye' : 'fas fa-eye-slash';
 }
 
 // ── NAVIGATION ────────────────────────────────────────────────
@@ -1944,4 +1918,19 @@ function _downloadCSV(rows, filename) {
   a.click();
 }
 
+
+
+// ── Fix: aria-hidden focus conflict for all Bootstrap modals ──
+document.querySelectorAll('.modal').forEach(modal => {
+  modal.addEventListener('show.bs.modal', () => {
+    if (document.activeElement && document.activeElement !== document.body) {
+      document.activeElement.blur();
+    }
+  });
+  modal.addEventListener('shown.bs.modal', () => {
+    const focusable = modal.querySelector('input, button, select, textarea, [tabindex]:not([tabindex="-1"])');
+    if (focusable) focusable.focus();
+  });
+  modal.addEventListener('hidden.bs.modal', () => { document.body.focus(); });
+});
 </script>

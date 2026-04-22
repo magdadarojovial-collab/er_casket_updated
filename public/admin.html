@@ -6,6 +6,8 @@
 <title>Eternal Rest – Admin Panel</title>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet"/>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet"/>
 <style>
 :root{
@@ -16,23 +18,7 @@
   --success:#4a7c59;--danger:#c0392b;--warning:#d97706;--info:#2980b9;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'Lato',sans-serif;background:#f0f2f5;color:var(--text);display:flex;min-height:100vh;}
-
-/* LOGIN */
-.login-screen{position:fixed;inset:0;background:linear-gradient(135deg,var(--navy-dark),var(--navy));display:flex;align-items:center;justify-content:center;z-index:9999;}
-.login-box{background:var(--white);border-radius:14px;padding:2.5rem;width:100%;max-width:420px;box-shadow:0 20px 60px rgba(0,0,0,0.3);}
-.login-logo{text-align:center;margin-bottom:2rem;}
-.login-logo .icon{width:70px;height:70px;background:linear-gradient(135deg,var(--gold),var(--gold-light));border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--white);font-size:1.8rem;margin:0 auto 1rem;}
-.login-logo h4{font-family:'Playfair Display',serif;color:var(--navy);font-size:1.5rem;}
-.login-logo p{font-size:0.8rem;color:var(--muted);letter-spacing:1px;text-transform:uppercase;}
-.login-role-badge{display:inline-flex;align-items:center;gap:0.5rem;background:var(--gold-pale);border:1.5px solid var(--gold);color:var(--gold);border-radius:20px;padding:0.4rem 1rem;font-size:0.78rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:1.5rem;}
-.form-ctrl{border:1.5px solid var(--border);border-radius:6px;padding:0.65rem 1rem;font-size:0.9rem;width:100%;outline:none;font-family:'Lato';transition:border 0.2s;background:var(--cream);}
-.form-ctrl:focus{border-color:var(--gold);background:var(--white);}
-.form-label-c{font-size:0.72rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--navy);margin-bottom:0.4rem;display:block;}
-.btn-login{background:var(--gold);color:var(--white);border:none;border-radius:6px;padding:0.75rem;font-size:0.88rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;width:100%;cursor:pointer;transition:background 0.2s;}
-.btn-login:hover{background:var(--gold-light);}
-.login-access-denied{display:none;background:#fee2e2;border:1px solid #fca5a5;color:#991b1b;border-radius:8px;padding:1rem;text-align:center;margin-bottom:1rem;}
-.login-access-denied i{font-size:1.4rem;display:block;margin-bottom:0.4rem;}
+body{font-family:'Lato',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f0f2f5;color:var(--text);display:flex;min-height:100vh;}
 
 /* SIDEBAR */
 .sidebar{width:var(--sidebar-w);background:var(--navy-dark);min-height:100vh;position:fixed;left:0;top:0;z-index:100;display:flex;flex-direction:column;transition:transform 0.3s;}
@@ -109,9 +95,28 @@ body{font-family:'Lato',sans-serif;background:#f0f2f5;color:var(--text);display:
 .info-card h6{font-family:'Playfair Display',serif;font-size:1rem;color:var(--navy);margin-bottom:1rem;}
 
 /* MODAL */
-.modal-content{border-radius:10px;border:none;}
-.modal-header-c{background:var(--navy);color:var(--white);padding:1.2rem 1.5rem;border:none;}
-.modal-header-c h5{font-family:'Playfair Display',serif;color:var(--gold-light);font-size:1.3rem;margin:0;}
+.modal-content{border-radius:14px;border:none;box-shadow:0 24px 80px rgba(0,0,0,0.18);}
+.modal-header-c{background:var(--navy);color:var(--white);padding:1.2rem 1.6rem;border:none;border-radius:14px 14px 0 0;}
+.modal-header-c h5{font-family:'Playfair Display',serif;color:var(--gold-light);font-size:1.2rem;margin:0;}
+.modal-body-form{padding:1.6rem;}
+.form-section-title{font-size:0.68rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold);border-bottom:1px solid var(--gold-pale);padding-bottom:0.4rem;margin-bottom:1rem;display:flex;align-items:center;gap:0.5rem;}
+.form-section-title i{font-size:0.75rem;}
+.modal-footer-actions{padding:1rem 1.6rem;background:var(--cream);border-top:1px solid var(--border);border-radius:0 0 14px 14px;display:flex;justify-content:flex-end;gap:0.6rem;}
+.btn-modal-save{background:linear-gradient(135deg,var(--gold),#9a7d2e);color:#fff;border:none;border-radius:7px;padding:0.65rem 1.6rem;font-size:0.85rem;font-weight:700;letter-spacing:0.5px;cursor:pointer;transition:opacity 0.2s,transform 0.1s;display:inline-flex;align-items:center;gap:0.5rem;}
+.btn-modal-save:hover{opacity:0.9;}
+.btn-modal-save:active{transform:scale(0.98);}
+.btn-modal-cancel{background:none;color:var(--muted);border:1.5px solid var(--border);border-radius:7px;padding:0.65rem 1.2rem;font-size:0.85rem;font-weight:600;cursor:pointer;transition:all 0.2s;}
+.btn-modal-cancel:hover{background:var(--border);color:var(--navy);}
+.field-hint{font-size:0.7rem;color:var(--muted);margin-top:0.25rem;}
+/* FORM CONTROLS */
+.form-ctrl{border:1.5px solid var(--border);border-radius:6px;padding:0.65rem 1rem;font-size:0.9rem;width:100%;outline:none;font-family:'Lato',sans-serif;transition:border 0.2s,box-shadow 0.2s;background:var(--cream);color:var(--text);}
+.form-ctrl:focus{border-color:var(--gold);background:var(--white);box-shadow:0 0 0 3px rgba(184,151,58,0.12);}
+.form-label-c{font-size:0.72rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--navy);margin-bottom:0.4rem;display:block;}
+.btn-login{background:linear-gradient(135deg,var(--gold),#9a7d2e);color:var(--white);border:none;border-radius:6px;padding:0.75rem 1.4rem;font-size:0.88rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:opacity 0.2s,transform 0.1s;display:inline-flex;align-items:center;gap:0.5rem;}
+.btn-login:hover{opacity:0.9;}
+.btn-login:active{transform:scale(0.98);}
+.btn-login:disabled{opacity:0.6;cursor:not-allowed;}
+
 
 /* PAGE SECTIONS */
 .page-section{display:none;}
@@ -171,40 +176,6 @@ body{font-family:'Lato',sans-serif;background:#f0f2f5;color:var(--text);display:
 <body>
 
 <!-- ── LOGIN SCREEN ─────────────────────────────────────────────────────────── -->
-<div class="login-screen" id="loginScreen">
-  <div class="login-box">
-    <div class="login-logo">
-      <div class="icon"><i class="fas fa-user-tie"></i></div>
-      <h4>Eternal Rest</h4>
-      <p>Admin Portal</p>
-    </div>
-
-    <!-- Access-denied message (shown if wrong role logs in) -->
-    <div class="login-access-denied" id="accessDenied">
-      <i class="fas fa-shield-alt"></i>
-      <strong>Access Denied</strong>
-      <div style="font-size:0.82rem;margin-top:0.3rem;">Your account does not have admin privileges. Please contact your Super Administrator.</div>
-    </div>
-
-    <div class="mb-3">
-      <label class="form-label-c">Username</label>
-      <input type="text" class="form-ctrl" id="loginUser" placeholder="e.g. jdelacruz" autocomplete="username"/>
-    </div>
-    <div class="mb-3">
-      <label class="form-label-c">Password</label>
-      <div class="position-relative">
-        <input type="password" class="form-ctrl" id="loginPass" placeholder="Enter your password" style="padding-right:2.5rem;" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"/>
-        <button onclick="togglePass()" style="position:absolute;right:0.8rem;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--muted);cursor:pointer;"><i class="fas fa-eye" id="passEye"></i></button>
-      </div>
-    </div>
-    <div id="loginError" style="display:none;background:#fee2e2;color:#991b1b;border-radius:6px;padding:0.6rem 1rem;font-size:0.83rem;margin-bottom:1rem;"></div>
-    <button class="btn-login" onclick="doLogin()"><i class="fas fa-sign-in-alt me-2"></i>Sign In</button>
-    <div class="text-center mt-3">
-      <a href="index.html" style="font-size:0.8rem;color:var(--muted);text-decoration:none;"><i class="fas fa-arrow-left me-1"></i>Back to Public Site</a>
-    </div>
-  </div>
-</div>
-
 <!-- ── SIDEBAR ──────────────────────────────────────────────────────────────── -->
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-head">
@@ -569,7 +540,7 @@ body{font-family:'Lato',sans-serif;background:#f0f2f5;color:var(--text);display:
 
 <!-- ── MODALS ────────────────────────────────────────────────────────────────── -->
 <!-- Casket Modal -->
-<div class="modal fade" id="casketModal" tabindex="-1">
+<div class="modal fade" id="casketModal" tabindex="-1" aria-labelledby="casketModalTitle" aria-modal="true">
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content">
       <div class="modal-header-c d-flex justify-content-between align-items-center">
@@ -580,7 +551,7 @@ body{font-family:'Lato',sans-serif;background:#f0f2f5;color:var(--text);display:
         <div class="row g-3">
 
           <!-- LEFT: Photo uploader -->
-          <div class="col-md-4">
+          <div class="col-md-5">
             <label class="form-label-c">Casket Photo</label>
             <div class="photo-drop-zone" id="photoDropZone" onclick="triggerPhotoInput()" ondragover="onPhotoDragOver(event)" ondragleave="onPhotoDragLeave(event)" ondrop="onPhotoDrop(event)">
               <div class="drop-placeholder" id="dropPlaceholder">
@@ -599,7 +570,7 @@ body{font-family:'Lato',sans-serif;background:#f0f2f5;color:var(--text);display:
           </div>
 
           <!-- RIGHT: Fields -->
-          <div class="col-md-8">
+          <div class="col-md-7">
             <div class="row g-3">
               <div class="col-md-6"><label class="form-label-c">Casket Name *</label><input type="text" class="form-ctrl" id="c_name" placeholder="e.g. Heritage Narra Deluxe"/></div>
               <div class="col-md-6"><label class="form-label-c">Material *</label><input type="text" class="form-ctrl" id="c_material" placeholder="e.g. Premium Narra Wood"/></div>
@@ -636,14 +607,14 @@ body{font-family:'Lato',sans-serif;background:#f0f2f5;color:var(--text);display:
           </div>
 
         </div>
-        <button class="btn-login mt-4" onclick="saveCasket()"><i class="fas fa-save me-2"></i>Save Casket</button>
+        <button class="btn-login mt-4" onclick="saveCasket()"><i class="fas fa-save me-2"></i>SAVE CASKET</button>
       </div>
     </div>
   </div>
 </div>
 
 <!-- Reservation Modal -->
-<div class="modal fade" id="resModal" tabindex="-1">
+<div class="modal fade" id="resModal" tabindex="-1" aria-labelledby="resModalTitle" aria-modal="true">
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content">
       <div class="modal-header-c d-flex justify-content-between align-items-center">
@@ -652,10 +623,16 @@ body{font-family:'Lato',sans-serif;background:#f0f2f5;color:var(--text);display:
       </div>
       <div class="p-4">
         <div class="row g-3">
-          <div class="col-md-6"><label class="form-label-c">First Name</label><input type="text" class="form-ctrl" id="r_fname" placeholder="e.g. Juan"/></div>
-          <div class="col-md-6"><label class="form-label-c">Last Name</label><input type="text" class="form-ctrl" id="r_lname" placeholder="e.g. dela Cruz"/></div>
+          <div class="col-md-6"><label class="form-label-c">First Name *</label><input type="text" class="form-ctrl" id="r_fname" placeholder="e.g. Juan"/></div>
+          <div class="col-md-6"><label class="form-label-c">Last Name *</label><input type="text" class="form-ctrl" id="r_lname" placeholder="e.g. dela Cruz"/></div>
           <div class="col-md-6"><label class="form-label-c">Email</label><input type="email" class="form-ctrl" id="r_email" placeholder="e.g. jdelacruz@email.com"/></div>
           <div class="col-md-6"><label class="form-label-c">Phone</label><input type="tel" class="form-ctrl" id="r_phone" placeholder="e.g. +63 917 000 0000"/></div>
+          <div class="col-12"><label class="form-label-c">Client Address</label><input type="text" class="form-ctrl" id="r_client_address" placeholder="e.g. Blk 2 Lot 5, Mabini St., Brgy. San Jose, Davao City"/></div>
+          <div class="col-md-6"><label class="form-label-c">Deceased Name</label><input type="text" class="form-ctrl" id="r_deceased_name" placeholder="e.g. Maria Santos dela Cruz"/></div>
+          <div class="col-md-6"><label class="form-label-c">Retrieval Location</label><input type="text" class="form-ctrl" id="r_retrieval_location" placeholder="e.g. Divine Grace Hospital, Davao City"/></div>
+          <div class="col-md-6"><label class="form-label-c">Retrieval Date &amp; Time</label><input type="datetime-local" class="form-ctrl" id="r_retrieval_datetime"/></div>
+          <div class="col-md-6"><label class="form-label-c">Burial Schedule</label><input type="datetime-local" class="form-ctrl" id="r_burial_schedule"/></div>
+          <div class="col-md-6"><label class="form-label-c">Burial Place</label><input type="text" class="form-ctrl" id="r_burial_place" placeholder="e.g. Davao Memorial Park, Ma-a"/></div>
           <div class="col-md-6"><label class="form-label-c">Casket</label>
             <select class="form-ctrl" id="r_casket"><option value="">— Select a casket —</option></select>
           </div>
@@ -667,17 +644,6 @@ body{font-family:'Lato',sans-serif;background:#f0f2f5;color:var(--text);display:
             <select class="form-ctrl" id="r_status"><option value="pending">Pending</option><option value="confirmed">Confirmed</option><option value="completed">Completed</option><option value="cancelled">Cancelled</option></select>
           </div>
           <div class="col-12"><label class="form-label-c">Notes</label><textarea class="form-ctrl" id="r_notes" rows="2" placeholder="e.g. Specific floral preferences, religious rites, etc."></textarea></div>
-          <div style="background:#f8f6f1;border-radius:8px;padding:1rem;margin-top:0.5rem;">
-            <div style="font-size:0.78rem;font-weight:700;color:var(--navy);letter-spacing:1px;text-transform:uppercase;margin-bottom:0.8rem;"><i class="fas fa-info-circle me-2" style="color:var(--gold);"></i>Deceased & Retrieval Details</div>
-            <div class="row g-2">
-              <div class="col-md-6"><label class="form-label-c">Deceased Name</label><input type="text" class="form-ctrl" id="r_deceased_name" placeholder="e.g. Maria Santos dela Cruz"/></div>
-              <div class="col-md-6"><label class="form-label-c">Client Address</label><input type="text" class="form-ctrl" id="r_client_address" placeholder="e.g. Blk 2 Lot 5, Mabini St., Brgy. San Jose, Davao City"/></div>
-              <div class="col-md-12"><label class="form-label-c">Retrieval Location</label><input type="text" class="form-ctrl" id="r_retrieval_location" placeholder="e.g. Divine Grace Hospital, J.P. Laurel Ave., Davao City"/></div>
-              <div class="col-md-6"><label class="form-label-c">Retrieval Date & Time</label><input type="datetime-local" class="form-ctrl" id="r_retrieval_datetime"/></div>
-              <div class="col-md-6"><label class="form-label-c">Burial Schedule</label><input type="datetime-local" class="form-ctrl" id="r_burial_schedule"/></div>
-              <div class="col-md-6"><label class="form-label-c">Burial Place</label><input type="text" class="form-ctrl" id="r_burial_place" placeholder="e.g. Davao Memorial Park, Ma-a, Davao City"/></div>
-            </div>
-          </div>
         </div>
         <button class="btn-login mt-3" onclick="saveReservation()"><i class="fas fa-save me-2"></i>Save Reservation</button>
       </div>
@@ -774,52 +740,33 @@ let editingResId    = null;
 let _adminMemorialsCache = [];
 
 // ── LOGIN ─────────────────────────────────────────────────────────────────────
-async function doLogin() {
-  const username = document.getElementById('loginUser').value.trim();
-  const password = document.getElementById('loginPass').value;
-  const errEl    = document.getElementById('loginError');
-  const deniedEl = document.getElementById('accessDenied');
-  errEl.style.display = 'none';
-  deniedEl.style.display = 'none';
-
-  if (!username || !password) {
-    errEl.textContent = 'Username and password are required.';
-    errEl.style.display = 'block';
-    return;
-  }
-
-  const result = await apiFetch('/auth/login', { method: 'POST', body: JSON.stringify({ username, password }) });
-
-  if (result.success) {
-    const role = result.user.role;
-    // Role check: only admin or superadmin can use this panel
-    if (role !== 'admin' && role !== 'superadmin') {
-      deniedEl.style.display = 'block';
-      document.getElementById('loginPass').value = '';
-      return;
-    }
-    AUTH_TOKEN   = result.token;
-    CURRENT_USER = result.user;
-    localStorage.setItem('er_admin_token', AUTH_TOKEN);
-    // Superadmin who lands on admin.html gets redirected to their panel
-    if (result.user.role === 'superadmin') {
-      window.location.href = 'superadmin.html';
-      return;
-    }
-    isLoggedIn = true;
-    document.getElementById('loginScreen').style.display = 'none';
-    const u = result.user;
-    const initials = (u.fname[0] + (u.lname[0]||'')).toUpperCase();
-    setUserUI(u.fname + ' ' + u.lname, u.role, initials, u.branch_name);
-    initDashboard();
-    checkMsgBadge();
-    setInterval(checkMsgBadge, 30000);
-    startMsgPolling();
-  } else {
-    errEl.textContent = result.message || 'Invalid credentials.';
-    errEl.style.display = 'block';
-  }
+// ── AUTH — redirect to login.html if no valid token ──────────
+function doLogout() {
+  AUTH_TOKEN = null; CURRENT_USER = null;
+  localStorage.removeItem('er_admin_token');
+  window.location.href = 'login.html';
 }
+
+// ── SESSION RESTORE ────────────────────────────────────────────
+(async () => {
+  if (!AUTH_TOKEN) { window.location.href = 'login.html'; return; }
+  const result = await apiFetch('/auth/me');
+  if (!result.success) { localStorage.removeItem('er_admin_token'); window.location.href = 'login.html'; return; }
+  const role = result.user.role;
+  if (role !== 'admin' && role !== 'superadmin') { localStorage.removeItem('er_admin_token'); window.location.href = 'login.html'; return; }
+  // Superadmin landed on admin page — send to superadmin panel
+  if (role === 'superadmin') { window.location.href = 'superadmin.html'; return; }
+  // Valid admin session — init panel
+  CURRENT_USER = result.user;
+  const u = CURRENT_USER;
+  const initials = (u.fname[0] + (u.lname[0]||'')).toUpperCase();
+  isLoggedIn = true;
+  setUserUI(u.fname + ' ' + u.lname, u.role, initials, u.branch_name);
+  initDashboard();
+  checkMsgBadge();
+  setInterval(checkMsgBadge, 30000);
+  startMsgPolling();
+})();
 
 function setUserUI(name, role, initials, branchName) {
   document.getElementById('userAv').textContent          = initials;
@@ -832,24 +779,6 @@ function setUserUI(name, role, initials, branchName) {
     document.getElementById('branchBadgeLabel').textContent = branchName;
     document.querySelector('.s-role').textContent = branchName;
   }
-}
-
-function doLogout() {
-  AUTH_TOKEN = null; CURRENT_USER = null;
-  localStorage.removeItem('er_admin_token');
-  isLoggedIn = false;
-  document.getElementById('loginScreen').style.display = 'flex';
-  document.getElementById('loginUser').value = '';
-  document.getElementById('loginPass').value = '';
-  document.getElementById('loginError').style.display = 'none';
-  document.getElementById('accessDenied').style.display = 'none';
-}
-
-function togglePass() {
-  const inp = document.getElementById('loginPass');
-  const icon = document.getElementById('passEye');
-  inp.type = inp.type === 'password' ? 'text' : 'password';
-  icon.className = inp.type === 'password' ? 'fas fa-eye' : 'fas fa-eye-slash';
 }
 
 // ── NAVIGATION ────────────────────────────────────────────────────────────────
@@ -945,8 +874,8 @@ function renderAdminCaskets(data) {
     '<td>' + thumb + '</td>' +
     '<td><div style="font-weight:700;">' + c.name + '</div><div style="font-size:0.75rem;color:var(--muted);">' + (c.description||'').substring(0,40) + (c.description&&c.description.length>40?'...':'') + '</div></td>' +
     '<td style="font-size:0.83rem;">' + (c.material||'—') + '</td>' +
-    '<td><span style="font-size:0.72rem;background:var(--gold-pale);color:var(--gold);padding:0.2rem 0.5rem;border-radius:10px;font-weight:700;">' + c.category + '</span><br/><span style="font-size:0.68rem;color:var(--muted);">' + priceTier + '</span></td>' +
-    '<td><div style="font-weight:700;color:var(--gold);">₱' + Number(c.price).toLocaleString() + '</div><div style="font-size:0.68rem;color:var(--muted);">L' + (c.size_length||76) + ' W' + (c.size_width||26) + ' H' + (c.size_height||23) + '</div></td>' +
+    '<td><span style="font-size:0.72rem;background:var(--gold-pale);color:var(--gold);padding:0.2rem 0.5rem;border-radius:10px;font-weight:700;">' + c.category + '</span></td>' +
+    '<td style="font-weight:700;color:var(--gold);">₱' + Number(c.price).toLocaleString() + '</td>' +
     '<td><span class="badge-status badge-' + c.status + '">' + c.status + '</span></td>' +
     '<td style="text-align:center;font-weight:700;">' + c.stock + '</td>' +
     '<td><div class="d-flex gap-1"><button class="btn-action btn-edit" onclick="editCasket(' + c.id + ')"><i class="fas fa-edit"></i></button><button class="btn-action btn-delete" onclick="deleteCasket(' + c.id + ')"><i class="fas fa-trash"></i></button></div></td></tr>';
@@ -977,6 +906,8 @@ async function editCasket(id) {
   } else {
     resetPhotoZone();
   }
+  // Fix aria-hidden focus conflict — blur active element before showing modal
+  if (document.activeElement) document.activeElement.blur();
   new bootstrap.Modal(document.getElementById('casketModal')).show();
 }
 async function saveCasket() {
@@ -1320,6 +1251,7 @@ function adminShowQR(id) {
   const canvas = document.getElementById('adminQrCanvas');
   canvas.innerHTML = ''; canvas.dataset.memName = m.name;
   new QRCode(canvas, { text: url, width: 220, height: 220, colorDark: '#152039', colorLight: '#ffffff', correctLevel: QRCode.CorrectLevel.H });
+  if (document.activeElement) document.activeElement.blur();
   new bootstrap.Modal(document.getElementById('adminQrModal')).show();
 }
 function adminDownloadQR() {
@@ -1640,39 +1572,6 @@ document.getElementById('casketModal').addEventListener('show.bs.modal', () => {
   }
 });
 
-// ── SESSION RESTORE ───────────────────────────────────────────────────────────
-(async () => {
-  if (AUTH_TOKEN) {
-    const result = await apiFetch('/auth/me');
-    if (result.success) {
-      const role = result.user.role;
-      if (role !== 'admin' && role !== 'superadmin') {
-        localStorage.removeItem('er_admin_token');
-        AUTH_TOKEN = null;
-        return;
-      }
-      CURRENT_USER = result.user;
-      // Superadmin with saved token on admin.html → send to their panel
-      if (result.user.role === 'superadmin') {
-        window.location.href = 'superadmin.html';
-        return;
-      }
-      isLoggedIn   = true;
-      document.getElementById('loginScreen').style.display = 'none';
-      const u = result.user;
-      const initials = (u.fname[0] + (u.lname[0]||'')).toUpperCase();
-      setUserUI(u.fname + ' ' + u.lname, u.role, initials, u.branch_name);
-      initDashboard();
-      checkMsgBadge();
-      setInterval(checkMsgBadge, 30000);
-      startMsgPolling();
-    } else {
-      AUTH_TOKEN = null;
-      localStorage.removeItem('er_admin_token');
-    }
-  }
-})();
-
 // ─── ANALYTICS ───────────────────────────────────────────────
 let chartInstances = {};
 
@@ -1918,6 +1817,26 @@ async function loadCasketInclusions(casketId) {
 // Hook into showPage to auto-load messages when navigating there
 const _origShowPage = typeof showPage === 'function' ? showPage : null;
 
+
+// ── Fix: aria-hidden focus conflict for all Bootstrap modals ──────────────
+// Ensures focus is properly managed when modals open/close
+document.querySelectorAll('.modal').forEach(modal => {
+  modal.addEventListener('show.bs.modal', () => {
+    // Move focus away from any currently focused element before modal opens
+    if (document.activeElement && document.activeElement !== document.body) {
+      document.activeElement.blur();
+    }
+  });
+  modal.addEventListener('shown.bs.modal', () => {
+    // Move focus into the modal after it opens
+    const focusable = modal.querySelector('input, button, select, textarea, [tabindex]:not([tabindex="-1"])');
+    if (focusable) focusable.focus();
+  });
+  modal.addEventListener('hidden.bs.modal', () => {
+    // Return focus to body when modal closes
+    document.body.focus();
+  });
+});
 </script>
 </body>
 </html>

@@ -6,6 +6,8 @@
 <title>Eternal Rest – Funeral Home & Memorial Services</title>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet"/>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet"/>
 <style>
 :root{
@@ -23,7 +25,7 @@
   --success:#4a7c59;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'Lato',sans-serif;background:var(--cream);color:var(--text);}
+body{font-family:'Lato',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--cream);color:var(--text);}
 h1,h2,h3,h4,h5{font-family:'Playfair Display',serif;}
 
 /* NAVBAR */
@@ -577,40 +579,44 @@ footer{background:var(--navy-dark);color:rgba(255,255,255,0.6);padding:3rem 0 1.
             </div>
 
             <div style="font-size:0.72rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:0.8rem;padding-bottom:0.4rem;border-bottom:1px solid var(--border);">Service Pricing (₱)</div>
+            <div style="background:#fef9ef;border:1px solid var(--gold);border-radius:8px;padding:0.6rem 0.9rem;font-size:0.78rem;color:var(--navy);margin-bottom:0.9rem;">
+              <i class="fas fa-info-circle me-1" style="color:var(--gold);"></i>
+              Casket price is set automatically based on your selection. Service fees are standard rates and are fixed.
+            </div>
             <div class="row g-3 mb-3">
               <div class="col-md-6">
-                <label class="form-label-c">Coffin / Casket Price</label>
+                <label class="form-label-c">Coffin / Casket Price <span style="color:var(--gold);font-size:0.7rem;">— auto-filled</span></label>
                 <div class="position-relative">
                   <span style="position:absolute;left:0.9rem;top:50%;transform:translateY(-50%);color:var(--muted);font-size:0.9rem;">₱</span>
-                  <input type="number" class="form-ctrl" id="priceCoffin" placeholder="0.00" min="0" step="0.01" style="padding-left:1.8rem;" oninput="recalcTotal()"/>
+                  <input type="number" class="form-ctrl" id="priceCoffin" placeholder="Select a casket above" min="0" step="0.01" style="padding-left:1.8rem;background:#f8f5f0;font-weight:700;" readonly oninput="recalcTotal()"/>
                 </div>
               </div>
               <div class="col-md-6">
-                <label class="form-label-c">Funeral Car</label>
+                <label class="form-label-c">Funeral Car <span style="color:var(--muted);font-size:0.7rem;">— standard rate</span></label>
                 <div class="position-relative">
                   <span style="position:absolute;left:0.9rem;top:50%;transform:translateY(-50%);color:var(--muted);font-size:0.9rem;">₱</span>
-                  <input type="number" class="form-ctrl" id="priceFuneralCar" placeholder="0.00" min="0" step="0.01" style="padding-left:1.8rem;" oninput="recalcTotal()"/>
+                  <input type="number" class="form-ctrl" id="priceFuneralCar" value="3500" min="0" step="0.01" style="padding-left:1.8rem;" oninput="recalcTotal()"/>
                 </div>
               </div>
               <div class="col-md-6">
-                <label class="form-label-c">Funeral Services</label>
+                <label class="form-label-c">Funeral Services <span style="color:var(--muted);font-size:0.7rem;">— standard rate</span></label>
                 <div class="position-relative">
                   <span style="position:absolute;left:0.9rem;top:50%;transform:translateY(-50%);color:var(--muted);font-size:0.9rem;">₱</span>
-                  <input type="number" class="form-ctrl" id="priceFuneralServices" placeholder="0.00" min="0" step="0.01" style="padding-left:1.8rem;" oninput="recalcTotal()"/>
+                  <input type="number" class="form-ctrl" id="priceFuneralServices" value="5000" min="0" step="0.01" style="padding-left:1.8rem;" oninput="recalcTotal()"/>
                 </div>
               </div>
               <div class="col-md-6">
-                <label class="form-label-c">Embalming</label>
+                <label class="form-label-c">Embalming <span style="color:var(--muted);font-size:0.7rem;">— standard rate</span></label>
                 <div class="position-relative">
                   <span style="position:absolute;left:0.9rem;top:50%;transform:translateY(-50%);color:var(--muted);font-size:0.9rem;">₱</span>
-                  <input type="number" class="form-ctrl" id="priceEmbalming" placeholder="0.00" min="0" step="0.01" style="padding-left:1.8rem;" oninput="recalcTotal()"/>
+                  <input type="number" class="form-ctrl" id="priceEmbalming" value="3500" min="0" step="0.01" style="padding-left:1.8rem;" oninput="recalcTotal()"/>
                 </div>
               </div>
               <div class="col-md-6">
-                <label class="form-label-c">Other Charges</label>
+                <label class="form-label-c">Other Charges <span style="color:var(--muted);font-size:0.7rem;">— processing &amp; misc</span></label>
                 <div class="position-relative">
                   <span style="position:absolute;left:0.9rem;top:50%;transform:translateY(-50%);color:var(--muted);font-size:0.9rem;">₱</span>
-                  <input type="number" class="form-ctrl" id="priceOther" placeholder="0.00" min="0" step="0.01" style="padding-left:1.8rem;" oninput="recalcTotal()"/>
+                  <input type="number" class="form-ctrl" id="priceOther" value="1500" min="0" step="0.01" style="padding-left:1.8rem;" oninput="recalcTotal()"/>
                 </div>
               </div>
               <div class="col-md-6">
@@ -719,8 +725,8 @@ footer{background:var(--navy-dark);color:rgba(255,255,255,0.6);padding:3rem 0 1.
             <div class="row g-2 mb-4" id="paymentMethods">
               <div class="col-6 col-md-3">
                 <div class="pay-method-card" onclick="selectPayment('walkin')" id="pm-walkin">
-                  <i class="fas fa-walking" style="font-size:1.6rem;color:#1c2b4a;"></i>
-                  <div style="font-size:0.72rem;font-weight:700;margin-top:0.4rem;color:var(--navy);">Walk-In</div>
+                  <i class="fas fa-money-bill-wave" style="font-size:1.6rem;color:#27ae60;"></i>
+                  <div style="font-size:0.72rem;font-weight:700;margin-top:0.4rem;color:var(--navy);">Cash / Walk-In</div>
                 </div>
               </div>
               <div class="col-6 col-md-3">
@@ -774,7 +780,7 @@ footer{background:var(--navy-dark);color:rgba(255,255,255,0.6);padding:3rem 0 1.
           <div class="info-item"><i class="fas fa-clock"></i><p>Office Hours: Mon–Sat 8AM–8PM<br/>Emergency: 24/7</p></div>
           <hr style="border-color:rgba(255,255,255,0.1);"/>
           <div class="info-item"><i class="fas fa-shield-alt"></i><p>All reservations are fully secured and confidential. A confirmation email will be sent upon booking.</p></div>
-          <div class="info-item"><i class="fas fa-credit-card"></i><p>Payment options: Cash, GCash, BPI, BDO, PayMaya</p></div>
+          <div class="info-item"><i class="fas fa-credit-card"></i><p>Payment options: <strong>Cash (Walk-In)</strong>, BPI, BDO, Installment</p></div>
         </div>
       </div>
     </div>
@@ -879,7 +885,6 @@ footer{background:var(--navy-dark);color:rgba(255,255,255,0.6);padding:3rem 0 1.
       <span>
         <a href="#" class="footer-link d-inline me-3">Privacy Policy</a>
         <a href="#" class="footer-link d-inline me-3">Terms of Service</a>
-        <a href="admin.html" target="_blank" style="font-size:0.72rem;color:rgba(255,255,255,0.18);text-decoration:none;letter-spacing:0.5px;transition:color 0.2s;" onmouseover="this.style.color='rgba(184,151,58,0.6)'" onmouseout="this.style.color='rgba(255,255,255,0.18)'" title="Staff Access">Staff Portal</a>
       </span>
     </div>
   </div>
@@ -1061,6 +1066,8 @@ async function loadCaskets(params = {}) {
   ALL_CASKETS     = data;
   filteredCaskets = data;
   renderCaskets(data);
+  // Initialize standard service prices on the inline reservation form
+  setTimeout(initStandardPrices, 100);
   // Populate casket dropdown in Step 2
   const sel = document.getElementById('selectedCasket');
   if (sel) {
@@ -1199,7 +1206,13 @@ function onCasketSelectChange(val) {
   if (opt && opt.dataset.price) {
     const c = ALL_CASKETS.find(x => x.id == val);
     if (c) { selectedCasketObj = c; }
+    // Set casket price (auto-filled, read-only)
     document.getElementById('priceCoffin').value = opt.dataset.price;
+    // Set standard Philippine funeral service rates
+    document.getElementById('priceFuneralCar').value      = 3500;
+    document.getElementById('priceFuneralServices').value  = 5000;
+    document.getElementById('priceEmbalming').value        = 3500;
+    document.getElementById('priceOther').value            = 1500;
     recalcTotal();
   }
 }
@@ -1209,6 +1222,19 @@ function recalcTotal() {
   const total = ids.reduce((s, id) => s + (parseFloat(document.getElementById(id)?.value) || 0), 0);
   document.getElementById('totalPriceDisplay').textContent = '₱ ' + total.toLocaleString('en-PH', {minimumFractionDigits:2,maximumFractionDigits:2});
   recalcBalance();
+}
+
+// Initialize standard service prices on the inline form when the page loads
+function initStandardPrices() {
+  const carEl = document.getElementById('priceFuneralCar');
+  const svcEl = document.getElementById('priceFuneralServices');
+  const embEl = document.getElementById('priceEmbalming');
+  const othEl = document.getElementById('priceOther');
+  if (carEl && !carEl.value) carEl.value = 3500;
+  if (svcEl && !svcEl.value) svcEl.value = 5000;
+  if (embEl && !embEl.value) embEl.value = 3500;
+  if (othEl && !othEl.value) othEl.value = 1500;
+  recalcTotal();
 }
 
 function recalcBalance() {
@@ -1452,15 +1478,15 @@ const COMPANY_NAME    = 'Eternal Rest Funeral Home';
 
 const paymentDetails = {
   walkin: {
-    name: 'Walk-In Payment',
-    color: '#1c2b4a',
-    icon: 'fas fa-walking',
+    name: 'Cash / Walk-In',
+    color: '#27ae60',
+    icon: 'fas fa-money-bill-wave',
     isWalkIn: true,
     steps: [
       `Visit our office at <strong>${COMPANY_ADDRESS}</strong>`,
       'Bring a valid government-issued ID (UMID, PhilSys, Driver\'s License, Passport)',
       'Present this reservation and ask for the <strong>Payment Officer</strong>',
-      'Choose your preferred payment mode: <strong>Cash, Check, or Bank Transfer</strong> at the counter',
+      'Pay in <strong>Cash</strong> at the counter — we also accept Check or Bank Transfer',
       'Receive your Official Receipt and signed contract',
       '<strong>Walk-in hours:</strong> Mon–Sat 8AM–8PM · Emergency: 24/7'
     ]
@@ -2458,11 +2484,11 @@ async function loadBranchLocator() {
 }
 
 // ── HIDDEN STAFF KEYBOARD SHORTCUT ──────────────────────────────────────────
-// Typing the sequence Ctrl+Shift+A opens the admin portal silently
+// Ctrl+Shift+A opens the staff login portal silently
 document.addEventListener('keydown', e => {
   if (e.ctrlKey && e.shiftKey && e.key === 'A') {
     e.preventDefault();
-    window.open('admin.html', '_blank');
+    window.open('login.html', '_blank');
   }
 });
 
@@ -2512,6 +2538,11 @@ function openReservationPopup(casketId) {
       document.getElementById('pSelectedCasketName').textContent = c.name + ' — ₱' + Number(c.price).toLocaleString();
       document.getElementById('p_selectedCasket').value = c.id;
       document.getElementById('p_priceCoffin').value = c.price;
+      // Set standard Philippine funeral service rates
+      document.getElementById('p_priceFuneralCar').value      = 3500;
+      document.getElementById('p_priceFuneralServices').value  = 5000;
+      document.getElementById('p_priceEmbalming').value        = 3500;
+      document.getElementById('p_priceOther').value            = 1500;
       const pill = document.getElementById('resPopupCasketPill');
       pill.textContent = c.name;
       pill.style.display = 'inline-block';
@@ -3256,12 +3287,16 @@ document.addEventListener('keydown', e => {
         </div>
       </div>
       <div style="font-size:0.72rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:0.8rem;padding-bottom:0.4rem;border-bottom:1px solid var(--border);">Service Pricing (₱)</div>
+      <div style="background:#fef9ef;border:1px solid var(--gold);border-radius:8px;padding:0.6rem 0.9rem;font-size:0.78rem;color:var(--navy);margin-bottom:0.9rem;">
+        <i class="fas fa-info-circle me-1" style="color:var(--gold);"></i>
+        Casket price is set automatically. Service fees reflect standard Philippine funeral rates.
+      </div>
       <div class="row g-3 mb-3">
-        <div class="col-md-6"><label class="form-label-c">Coffin / Casket Price</label><div class="position-relative"><span style="position:absolute;left:0.9rem;top:50%;transform:translateY(-50%);color:var(--muted);">₱</span><input type="number" class="form-ctrl" id="p_priceCoffin" placeholder="0.00" min="0" step="0.01" style="padding-left:1.8rem;" oninput="pRecalcTotal()"/></div></div>
-        <div class="col-md-6"><label class="form-label-c">Funeral Car</label><div class="position-relative"><span style="position:absolute;left:0.9rem;top:50%;transform:translateY(-50%);color:var(--muted);">₱</span><input type="number" class="form-ctrl" id="p_priceFuneralCar" placeholder="0.00" min="0" step="0.01" style="padding-left:1.8rem;" oninput="pRecalcTotal()"/></div></div>
-        <div class="col-md-6"><label class="form-label-c">Funeral Services</label><div class="position-relative"><span style="position:absolute;left:0.9rem;top:50%;transform:translateY(-50%);color:var(--muted);">₱</span><input type="number" class="form-ctrl" id="p_priceFuneralServices" placeholder="0.00" min="0" step="0.01" style="padding-left:1.8rem;" oninput="pRecalcTotal()"/></div></div>
-        <div class="col-md-6"><label class="form-label-c">Embalming</label><div class="position-relative"><span style="position:absolute;left:0.9rem;top:50%;transform:translateY(-50%);color:var(--muted);">₱</span><input type="number" class="form-ctrl" id="p_priceEmbalming" placeholder="0.00" min="0" step="0.01" style="padding-left:1.8rem;" oninput="pRecalcTotal()"/></div></div>
-        <div class="col-md-6"><label class="form-label-c">Other Charges</label><div class="position-relative"><span style="position:absolute;left:0.9rem;top:50%;transform:translateY(-50%);color:var(--muted);">₱</span><input type="number" class="form-ctrl" id="p_priceOther" placeholder="0.00" min="0" step="0.01" style="padding-left:1.8rem;" oninput="pRecalcTotal()"/></div></div>
+        <div class="col-md-6"><label class="form-label-c">Coffin / Casket Price <span style="color:var(--gold);font-size:0.7rem;">— auto-filled</span></label><div class="position-relative"><span style="position:absolute;left:0.9rem;top:50%;transform:translateY(-50%);color:var(--muted);">₱</span><input type="number" class="form-ctrl" id="p_priceCoffin" placeholder="Select a casket" min="0" step="0.01" style="padding-left:1.8rem;background:#f8f5f0;font-weight:700;" readonly oninput="pRecalcTotal()"/></div></div>
+        <div class="col-md-6"><label class="form-label-c">Funeral Car <span style="color:var(--muted);font-size:0.7rem;">— standard rate</span></label><div class="position-relative"><span style="position:absolute;left:0.9rem;top:50%;transform:translateY(-50%);color:var(--muted);">₱</span><input type="number" class="form-ctrl" id="p_priceFuneralCar" value="3500" min="0" step="0.01" style="padding-left:1.8rem;" oninput="pRecalcTotal()"/></div></div>
+        <div class="col-md-6"><label class="form-label-c">Funeral Services <span style="color:var(--muted);font-size:0.7rem;">— standard rate</span></label><div class="position-relative"><span style="position:absolute;left:0.9rem;top:50%;transform:translateY(-50%);color:var(--muted);">₱</span><input type="number" class="form-ctrl" id="p_priceFuneralServices" value="5000" min="0" step="0.01" style="padding-left:1.8rem;" oninput="pRecalcTotal()"/></div></div>
+        <div class="col-md-6"><label class="form-label-c">Embalming <span style="color:var(--muted);font-size:0.7rem;">— standard rate</span></label><div class="position-relative"><span style="position:absolute;left:0.9rem;top:50%;transform:translateY(-50%);color:var(--muted);">₱</span><input type="number" class="form-ctrl" id="p_priceEmbalming" value="3500" min="0" step="0.01" style="padding-left:1.8rem;" oninput="pRecalcTotal()"/></div></div>
+        <div class="col-md-6"><label class="form-label-c">Other Charges <span style="color:var(--muted);font-size:0.7rem;">— processing &amp; misc</span></label><div class="position-relative"><span style="position:absolute;left:0.9rem;top:50%;transform:translateY(-50%);color:var(--muted);">₱</span><input type="number" class="form-ctrl" id="p_priceOther" value="1500" min="0" step="0.01" style="padding-left:1.8rem;" oninput="pRecalcTotal()"/></div></div>
         <div class="col-md-6"><label class="form-label-c" style="color:var(--navy);font-weight:700;">Total Package Price</label><div class="p-3" style="background:var(--navy);border-radius:6px;font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--gold-light);font-weight:700;" id="p_totalPriceDisplay">₱ 0.00</div></div>
       </div>
       <div style="font-size:0.72rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:0.8rem;padding-bottom:0.4rem;border-bottom:1px solid var(--border);">Payment Arrangement</div>
@@ -3298,7 +3333,7 @@ document.addEventListener('keydown', e => {
       </div>
       <label class="form-label-c mb-2">Select Payment Method</label>
       <div class="row g-2 mb-4" id="p_paymentMethods">
-        <div class="col-6 col-md-3"><div class="pay-method-card" onclick="pSelectPayment('walkin')" id="p_pm-walkin"><i class="fas fa-walking" style="font-size:1.6rem;color:#1c2b4a;"></i><div style="font-size:0.72rem;font-weight:700;margin-top:0.4rem;color:var(--navy);">Walk-In</div></div></div>
+        <div class="col-6 col-md-3"><div class="pay-method-card" onclick="pSelectPayment('walkin')" id="p_pm-walkin"><i class="fas fa-money-bill-wave" style="font-size:1.6rem;color:#27ae60;"></i><div style="font-size:0.72rem;font-weight:700;margin-top:0.4rem;color:var(--navy);">Cash / Walk-In</div></div></div>
         <div class="col-6 col-md-3"><div class="pay-method-card" onclick="pSelectPayment('bpi')" id="p_pm-bpi"><div style="font-size:1.3rem;color:#d31a21;font-weight:900;font-family:serif;">BPI</div><div style="font-size:0.72rem;font-weight:700;margin-top:0.4rem;color:var(--navy);">BPI Online</div></div></div>
         <div class="col-6 col-md-3"><div class="pay-method-card" onclick="pSelectPayment('bdo')" id="p_pm-bdo"><div style="font-size:1.1rem;color:#003087;font-weight:900;font-family:serif;">BDO</div><div style="font-size:0.72rem;font-weight:700;margin-top:0.4rem;color:var(--navy);">BDO Online</div></div></div>
         <div class="col-6 col-md-3"><div class="pay-method-card" onclick="pSelectPayment('installment')" id="p_pm-installment"><i class="fas fa-calendar-alt" style="font-size:1.4rem;color:var(--gold);"></i><div style="font-size:0.72rem;font-weight:700;margin-top:0.4rem;color:var(--navy);">Installment</div></div></div>
