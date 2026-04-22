@@ -1012,12 +1012,16 @@ let selectedCasketObj = null;
 let CURRENT_CLIENT  = null;
 let CLIENT_TOKEN    = localStorage.getItem('er_client_token') || null;
 
-// Validate JWT — checks expiry so stale tokens don't bypass auth
-function isTokenValid(token) {
+// Validate JWT — checks expiry AND optionally role so stale or wrong-role tokens don't bypass auth
+function isTokenValid(token, requiredRole) {
   if (!token) return false;
   try {
     const payload = JSON.parse(atob(token.split('.')[1]));
     if (payload.exp && Date.now() / 1000 > payload.exp) return false;
+    if (requiredRole) {
+      const roles = Array.isArray(requiredRole) ? requiredRole : [requiredRole];
+      if (!roles.includes(payload.role)) return false;
+    }
     return true;
   } catch { return false; }
 }
@@ -1331,26 +1335,31 @@ function formatYear(d) { return d ? new Date(d).getFullYear() : ''; }
 function visitMemorial(id) {
   const clientToken = localStorage.getItem('er_client_token');
   const adminToken  = localStorage.getItem('er_admin_token');
-  // Validate token — must be present AND not expired
-  if (isTokenValid(clientToken) || isTokenValid(adminToken)) {
+  // Must have a valid client token (role: client) OR a valid admin token (role: admin/superadmin)
+  const hasValidClient = isTokenValid(clientToken, 'client');
+  const hasValidAdmin  = isTokenValid(adminToken, ['admin', 'superadmin']);
+  // Clean up any stale/wrong-role tokens
+  if (clientToken && !hasValidClient) localStorage.removeItem('er_client_token');
+  if (adminToken  && !hasValidAdmin)  localStorage.removeItem('er_admin_token');
+  if (hasValidClient || hasValidAdmin) {
     window.location.href = 'memorial.html?memorial=' + id;
   } else {
-    // Clear any stale/expired tokens
-    if (clientToken && !isTokenValid(clientToken)) localStorage.removeItem('er_client_token');
-    if (adminToken  && !isTokenValid(adminToken))  localStorage.removeItem('er_admin_token');
-    // Re-use the main clientAuthModal (register tab + memorial banner), same pattern as Add Casket
     openClientAuth('register', () => { window.location.href = 'memorial.html?memorial=' + id; }, true);
   }
 }
 
 // ── MEMORIAL REGISTER MODAL FUNCTIONS ────────────────────────────────────────
 async function lightCandle(id, btn) {
-  // Candle lighting also requires being logged in
-  const token = localStorage.getItem('er_client_token') || localStorage.getItem('er_admin_token');
-  if (!token) {
+  // Candle lighting requires being logged in as a client or admin (with correct role)
+  const clientToken = localStorage.getItem('er_client_token');
+  const adminToken  = localStorage.getItem('er_admin_token');
+  const hasValidClient = isTokenValid(clientToken, 'client');
+  const hasValidAdmin  = isTokenValid(adminToken, ['admin', 'superadmin']);
+  if (!hasValidClient && !hasValidAdmin) {
     openClientAuth('login', () => lightCandle(id, btn));
     return;
   }
+  const token = hasValidAdmin ? adminToken : clientToken;
   btn.style.transform = 'scale(1.5)';
   setTimeout(() => btn.style.transform = '', 300);
   const { success, candles } = await apiFetch(`/memorials/${id}/candle`, { method: 'POST' });
