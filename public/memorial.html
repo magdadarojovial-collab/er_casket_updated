@@ -208,29 +208,44 @@ body{font-family:'Lato',sans-serif;background:var(--navy-dark);color:var(--white
   </div>
 </div>
 
-<!-- ADMIN MODE BANNER (visible only when admin token present) -->
-<div class="admin-mode-bar" id="adminModeBanner" style="display:none;">
+<!-- ADMIN MODE BANNER (visible only when admin token present) -->\n<div class="admin-mode-bar" id="adminModeBanner" style="display:none;">
   <span class="admin-mode-label"><i class="fas fa-shield-alt"></i>Admin moderation mode — hover photos to edit or delete</span>
   <a href="admin.html" style="color:rgba(255,255,255,0.4);font-size:0.75rem;text-decoration:none;"><i class="fas fa-arrow-left me-1"></i>Back to Admin</a>
 </div>
 <script>
-  // Show admin banner ONLY if a valid, non-expired admin/superadmin token is present
-  (function() {
-    var t = localStorage.getItem('er_admin_token');
-    if (!t) return;
-    try {
-      var p = JSON.parse(atob(t.split('.')[1]));
-      // Must be non-expired AND must have admin or superadmin role
-      var isAdmin = (p.role === 'admin' || p.role === 'superadmin');
-      var notExpired = (!p.exp || Date.now() / 1000 < p.exp);
-      if (isAdmin && notExpired) {
-        document.getElementById('adminModeBanner').style.display = 'flex';
-      } else {
-        // Token is stale or belongs to a non-admin — clean it up
+  // ── TOKEN SANITIZER — runs immediately on every page load ──
+  // Enforces that each localStorage key only holds a token with the correct role.
+  // Any token that is expired, malformed, or has the wrong role is deleted NOW,
+  // before any other JS runs. This also handles browsers with stale pre-fix tokens.
+  (function sanitizeTokens() {
+    function getPayload(token) {
+      try { return JSON.parse(atob(token.split('.')[1])); } catch(e) { return null; }
+    }
+    function isExpired(p) { return p.exp && Date.now() / 1000 > p.exp; }
+
+    // er_admin_token MUST have role admin or superadmin
+    var adminToken = localStorage.getItem('er_admin_token');
+    if (adminToken) {
+      var ap = getPayload(adminToken);
+      if (!ap || isExpired(ap) || (ap.role !== 'admin' && ap.role !== 'superadmin')) {
         localStorage.removeItem('er_admin_token');
+        adminToken = null;
       }
-    } catch(e) {
-      localStorage.removeItem('er_admin_token');
+    }
+
+    // er_client_token MUST have role client
+    var clientToken = localStorage.getItem('er_client_token');
+    if (clientToken) {
+      var cp = getPayload(clientToken);
+      if (!cp || isExpired(cp) || cp.role !== 'client') {
+        localStorage.removeItem('er_client_token');
+        clientToken = null;
+      }
+    }
+
+    // Only show admin banner if a clean admin token survived
+    if (adminToken) {
+      document.getElementById('adminModeBanner').style.display = 'flex';
     }
   })();
 </script>
