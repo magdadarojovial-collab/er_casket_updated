@@ -214,16 +214,24 @@ body{font-family:'Lato',sans-serif;background:var(--navy-dark);color:var(--white
   <a href="admin.html" style="color:rgba(255,255,255,0.4);font-size:0.75rem;text-decoration:none;"><i class="fas fa-arrow-left me-1"></i>Back to Admin</a>
 </div>
 <script>
-  // Show admin banner immediately if admin token is in localStorage
+  // Show admin banner ONLY if a valid, non-expired admin/superadmin token is present
   (function() {
     var t = localStorage.getItem('er_admin_token');
     if (!t) return;
     try {
       var p = JSON.parse(atob(t.split('.')[1]));
-      if (!p.exp || Date.now() / 1000 < p.exp) {
+      // Must be non-expired AND must have admin or superadmin role
+      var isAdmin = (p.role === 'admin' || p.role === 'superadmin');
+      var notExpired = (!p.exp || Date.now() / 1000 < p.exp);
+      if (isAdmin && notExpired) {
         document.getElementById('adminModeBanner').style.display = 'flex';
+      } else {
+        // Token is stale or belongs to a non-admin — clean it up
+        localStorage.removeItem('er_admin_token');
       }
-    } catch(e) {}
+    } catch(e) {
+      localStorage.removeItem('er_admin_token');
+    }
   })();
 </script>
 
@@ -448,18 +456,25 @@ let tributePhoto  = null;
 const ADMIN_TOKEN  = localStorage.getItem('er_admin_token')  || null;
 const CLIENT_TOKEN = localStorage.getItem('er_client_token') || null;
 
-// Validate tokens — check JWT expiry so stale tokens don't grant access
-function isTokenValid(token) {
+// Validate tokens — check JWT expiry AND role so stale or wrong-role tokens don't grant access
+function isTokenValid(token, requiredRole) {
   if (!token) return false;
   try {
     const payload = JSON.parse(atob(token.split('.')[1]));
     if (payload.exp && Date.now() / 1000 > payload.exp) return false;
+    // If a specific role is required, enforce it
+    if (requiredRole) {
+      const roles = Array.isArray(requiredRole) ? requiredRole : [requiredRole];
+      if (!roles.includes(payload.role)) return false;
+    }
     return true;
   } catch { return false; }
 }
 
-const IS_ADMIN     = isTokenValid(ADMIN_TOKEN);
-const IS_CLIENT    = isTokenValid(CLIENT_TOKEN);
+// Admin must have an admin/superadmin role — a client token stored in er_admin_token is NOT admin
+const IS_ADMIN  = isTokenValid(ADMIN_TOKEN, ['admin', 'superadmin']);
+// Client must have client role
+const IS_CLIENT = isTokenValid(CLIENT_TOKEN, 'client');
 const ACTIVE_TOKEN = (IS_ADMIN ? ADMIN_TOKEN : null) || (IS_CLIENT ? CLIENT_TOKEN : null) || null;
 
 async function apiFetch(path, opts = {}) {
@@ -558,11 +573,12 @@ function showToast(msg, duration = 3000) {
   MEM_ID = params.get('memorial') || params.get('id');
   if (!MEM_ID) { showError(); return; }
 
+  // Proactively clean up tokens that are expired or have the wrong role
+  if (ADMIN_TOKEN  && !IS_ADMIN)  localStorage.removeItem('er_admin_token');
+  if (CLIENT_TOKEN && !IS_CLIENT) localStorage.removeItem('er_client_token');
+
   // Gate: must be a valid (non-expired) logged-in client OR admin to view
   if (!IS_ADMIN && !IS_CLIENT) {
-    // Clear any stale/expired tokens
-    if (ADMIN_TOKEN  && !IS_ADMIN)  localStorage.removeItem('er_admin_token');
-    if (CLIENT_TOKEN && !IS_CLIENT) localStorage.removeItem('er_client_token');
     showGate();
     return;
   }
@@ -598,19 +614,27 @@ async function loadMemorial() {
   document.getElementById('statCandles').textContent  = MEM_DATA.candles || 0;
   document.getElementById('candleCount').textContent  = (MEM_DATA.candles || 0) + ' candles lit';
 
-  // Show admin banner if admin is viewing
+  // Show admin banner ONLY for confirmed admin/superadmin role — never for clients
   if (IS_ADMIN) document.getElementById('adminModeBanner').style.display = 'flex';
-  else document.getElementById('adminModeBanner').style.display = 'none';
+  else          document.getElementById('adminModeBanner').style.display = 'none';
 
   renderPhotos();
   renderTributes();
   updateStats();
 
-  // Show viewer identity in back bar
+  // Show viewer identity in back bar — strictly by role
   const signOutLink  = document.getElementById('memSignOutLink');
   const viewerLabel  = document.getElementById('memViewerLabel');
-  const clientToken  = localStorage.getItem('er_client_token');
-  if (clientToken && !IS_ADMIN) {
+  if (IS_ADMIN) {
+    // Admin: show role label, no sign-out (they use the admin panel)
+    try {
+      const payload = JSON.parse(atob(ADMIN_TOKEN.split('.')[1]));
+      if (viewerLabel) viewerLabel.textContent = 'Viewing as Admin';
+    } catch {}
+    if (signOutLink) signOutLink.style.display = 'none';
+  } else if (IS_CLIENT) {
+    // Client: show their name and a sign-out option
+    const clientToken = localStorage.getItem('er_client_token');
     try {
       const payload = JSON.parse(atob(clientToken.split('.')[1]));
       if (viewerLabel) viewerLabel.textContent = 'Viewing as ' + payload.fname + ' ' + (payload.lname || '');
