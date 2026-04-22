@@ -3,9 +3,9 @@
 const router = require('express').Router();
 const db     = require('../config/db');
 const { authMiddleware } = require('../middleware/auth');
-
+ 
 router.use(authMiddleware);
-
+ 
 // ── GET /api/dashboard/stats ──────────────────────────────────
 router.get('/stats', async (req, res) => {
   try {
@@ -15,7 +15,7 @@ router.get('/stats', async (req, res) => {
     const branchScope  = isSuperAdmin ? 'branch_id IN (1,2)' : `branch_id = ${db.escape(bid)}`;
     const where        = ' WHERE ' + branchScope;
     const whereAnd     = ' WHERE ' + branchScope + ' AND ';
-
+ 
     const [[casketRow]]  = await db.query(`SELECT COUNT(*) AS total, COALESCE(SUM(stock),0) AS totalStock FROM caskets${where}`);
     const [[resRow]]     = await db.query(`SELECT COUNT(*) AS total FROM reservations${where}`);
     const [[pendingRow]] = await db.query(`SELECT COUNT(*) AS total FROM reservations${whereAnd}status = 'pending'`);
@@ -24,29 +24,31 @@ router.get('/stats', async (req, res) => {
       ? 'SELECT COUNT(*) AS total FROM users WHERE branch_id IN (1,2) OR branch_id IS NULL'
       : `SELECT COUNT(*) AS total FROM users WHERE branch_id = ${db.escape(bid)}`
     );
-
+ 
     const [[revenueRow]] = await db.query(
       `SELECT COALESCE(SUM(price_total),0) AS totalRevenue,
               COALESCE(SUM(price_advance),0) AS totalCollected,
               COALESCE(SUM(price_balance),0) AS totalOutstanding
        FROM reservations${whereAnd}payment_status = 'verified'`
     );
-
+ 
     // Monthly revenue (last 6 months)
     const [monthly] = await db.query(
       `SELECT DATE_FORMAT(created_at,'%b %Y') AS month,
+              DATE_FORMAT(created_at,'%Y-%m') AS month_key,
               COUNT(*) AS count,
               COALESCE(SUM(price_total),0) AS revenue
        FROM reservations${whereAnd}created_at >= DATE_SUB(NOW(), INTERVAL 6 MONTH)
-       GROUP BY DATE_FORMAT(created_at,'%Y-%m') ORDER BY MIN(created_at) ASC`
+       GROUP BY DATE_FORMAT(created_at,'%Y-%m'), DATE_FORMAT(created_at,'%b %Y')
+       ORDER BY month_key ASC`
     );
-
+ 
     // Inventory by status
     const [inventory] = await db.query(
       `SELECT status, COUNT(*) AS count, COALESCE(SUM(stock),0) AS totalStock
        FROM caskets${where} GROUP BY status`
     );
-
+ 
     // ── Caskets by category (wood vs metal only) ──────────────
     const [byCategory] = await db.query(
       `SELECT category,
@@ -56,7 +58,7 @@ router.get('/stats', async (req, res) => {
        FROM caskets${where} AND category IN ('wood','metal')
        GROUP BY category ORDER BY category`
     );
-
+ 
     // ── Branch summary (2 branches only) ─────────────────────
     let branchSummary = [];
     if (isSuperAdmin) {
@@ -74,7 +76,7 @@ router.get('/stats', async (req, res) => {
       `);
       branchSummary = brows;
     }
-
+ 
     res.json({
       success: true,
       data: {
@@ -98,7 +100,7 @@ router.get('/stats', async (req, res) => {
     res.status(500).json({ success: false, message: 'Server error.' });
   }
 });
-
+ 
 // ── GET /api/dashboard/audit ──────────────────────────────────
 router.get('/audit', async (req, res) => {
   try {
@@ -113,7 +115,7 @@ router.get('/audit', async (req, res) => {
     res.status(500).json({ success: false, message: 'Server error.' });
   }
 });
-
+ 
 // ── GET /api/dashboard/inventory ─────────────────────────────
 router.get('/inventory', async (req, res) => {
   try {
@@ -138,7 +140,7 @@ router.get('/inventory', async (req, res) => {
     res.status(500).json({ success: false, message: 'Server error.' });
   }
 });
-
+ 
 // ── GET /api/dashboard/reports ────────────────────────────────
 // Comprehensive report filtered by branch (Gensan/Bohol) and category (wood/metal)
 router.get('/reports', async (req, res) => {
@@ -146,7 +148,7 @@ router.get('/reports', async (req, res) => {
     const isSuperAdmin = req.user.role === 'superadmin';
     const bid          = req.user.branch_id;
     const { from_date, to_date, branch_id: filterBranch } = req.query;
-
+ 
     // Determine which branch(es) to report on
     let targetBranches;
     if (isSuperAdmin) {
@@ -156,11 +158,11 @@ router.get('/reports', async (req, res) => {
     } else {
       targetBranches = [bid];
     }
-
+ 
     const branchIn = targetBranches.join(',');
     const dateFrom = from_date || new Date(new Date().setFullYear(new Date().getFullYear() - 1)).toISOString().split('T')[0];
     const dateTo   = to_date   || new Date().toISOString().split('T')[0];
-
+ 
     // Reservations by branch + casket category
     const [byCatBranch] = await db.query(`
       SELECT b.name AS branch_name, b.id AS branch_id,
@@ -177,7 +179,7 @@ router.get('/reports', async (req, res) => {
       GROUP BY b.id, c.category
       ORDER BY b.id, c.category
     `, [dateFrom, dateTo]);
-
+ 
     // Monthly revenue per branch
     const [monthlyPerBranch] = await db.query(`
       SELECT DATE_FORMAT(r.created_at,'%Y-%m') AS month,
@@ -191,7 +193,7 @@ router.get('/reports', async (req, res) => {
         AND DATE(r.created_at) BETWEEN ? AND ?
       GROUP BY month, b.id ORDER BY month ASC, b.id ASC
     `, [dateFrom, dateTo]);
-
+ 
     // Stock summary by branch + category
     const [stockSummary] = await db.query(`
       SELECT b.name AS branch_name, b.id AS branch_id,
@@ -206,12 +208,12 @@ router.get('/reports', async (req, res) => {
         AND c.category IN ('wood','metal')
       GROUP BY b.id, c.category ORDER BY b.id, c.category
     `);
-
+ 
     res.json({ success: true, data: { byCatBranch, monthlyPerBranch, stockSummary, dateFrom, dateTo, branches: targetBranches } });
   } catch (err) {
     console.error(err);
     res.status(500).json({ success: false, message: 'Server error.' });
   }
 });
-
+ 
 module.exports = router;
