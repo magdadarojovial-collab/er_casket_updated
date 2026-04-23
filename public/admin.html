@@ -351,7 +351,7 @@ body{font-family:'Lato',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-
         <div class="table-head"><h6>Digital Memorials</h6></div>
         <div class="table-responsive">
           <table class="table mb-0">
-            <thead><tr><th>#</th><th>Name</th><th>Born</th><th>Passed</th><th>Candles</th><th>QR Code</th><th>Edit/Delete</th></tr></thead>
+            <thead><tr><th>#</th><th>Name</th><th>Born</th><th>Passed</th><th>Candles</th><th>Photos</th><th>QR Code</th><th>Actions</th></tr></thead>
             <tbody id="memorialAdminTable"></tbody>
           </table>
         </div>
@@ -361,15 +361,83 @@ body{font-family:'Lato',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-
 
     <!-- PHOTO MODERATION -->
     <div class="page-section" id="page-photo-mod">
+      <!-- Toolbar -->
       <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
-        <div>
-          <span style="font-size:0.8rem;color:var(--muted);">All photos uploaded by the public across all memorials. Review, edit captions, or delete inappropriate content.</span>
+        <div class="d-flex flex-wrap gap-2 align-items-center">
+          <input type="search" class="form-ctrl" id="photoModSearch" placeholder="Search memorial name…" style="width:200px;" oninput="filterPhotoMod()"/>
+          <select class="form-ctrl" id="photoModMemFilter" style="width:180px;" onchange="filterPhotoMod()">
+            <option value="">All Memorials</option>
+          </select>
+          <span id="photoModCount" style="font-size:0.8rem;color:var(--muted);"></span>
         </div>
         <button class="btn-action btn-view2" onclick="loadPhotoMod()"><i class="fas fa-sync me-1"></i>Refresh</button>
+      </div>
+      <!-- Stats row -->
+      <div class="row g-2 mb-3" id="photoModStats" style="display:none!important;">
+        <div class="col-auto">
+          <div style="background:var(--white);border:1px solid var(--border);border-radius:8px;padding:0.5rem 1rem;font-size:0.82rem;">
+            <span style="font-weight:700;color:var(--navy);" id="pmTotalCount">0</span> <span style="color:var(--muted);">total photos</span>
+          </div>
+        </div>
+        <div class="col-auto">
+          <div style="background:var(--white);border:1px solid var(--border);border-radius:8px;padding:0.5rem 1rem;font-size:0.82rem;">
+            <span style="font-weight:700;color:var(--gold);" id="pmMemCount">0</span> <span style="color:var(--muted);">memorials with photos</span>
+          </div>
+        </div>
       </div>
       <div id="photoModGrid" class="row g-3">
         <div class="col-12 text-center" style="color:var(--muted);padding:2rem;">
           <div class="spinner-border spinner-border-sm me-2"></div>Loading photos...
+        </div>
+      </div>
+    </div>
+
+    <!-- Caption Edit Modal -->
+    <div class="modal fade" id="captionModal" tabindex="-1" aria-modal="true">
+      <div class="modal-dialog modal-dialog-centered" style="max-width:480px;">
+        <div class="modal-content">
+          <div class="modal-header-c d-flex justify-content-between align-items-center">
+            <h5><i class="fas fa-pen me-2"></i>Edit Photo Caption</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="p-4">
+            <div id="captionModalPreview" style="margin-bottom:1rem;text-align:center;">
+              <img id="captionModalImg" src="" alt="" style="max-height:200px;max-width:100%;border-radius:8px;object-fit:contain;border:1px solid var(--border);"/>
+            </div>
+            <div style="font-size:0.75rem;color:var(--muted);margin-bottom:0.3rem;" id="captionModalMeta"></div>
+            <label class="form-label-c">Caption</label>
+            <textarea class="form-ctrl" id="captionModalInput" rows="3" placeholder="Enter a caption for this photo (leave empty to remove)…" maxlength="300"></textarea>
+            <div style="font-size:0.7rem;color:var(--muted);margin-top:0.25rem;">Max 300 characters</div>
+          </div>
+          <div class="modal-footer-actions">
+            <button type="button" class="btn-modal-cancel" data-bs-dismiss="modal">Cancel</button>
+            <button type="button" class="btn-modal-save" onclick="saveCaptionModal()"><i class="fas fa-save me-1"></i>Save Caption</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Photo Lightbox Modal -->
+    <div class="modal fade" id="photoLightboxModal" tabindex="-1" aria-modal="true">
+      <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content" style="background:#111;border:none;">
+          <div class="d-flex justify-content-between align-items-center p-3" style="background:rgba(0,0,0,0.7);">
+            <div>
+              <div style="color:var(--gold-light);font-weight:700;font-size:0.9rem;" id="lbMemName"></div>
+              <div style="color:rgba(255,255,255,0.5);font-size:0.75rem;" id="lbCaption"></div>
+            </div>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+          </div>
+          <div style="text-align:center;background:#000;padding:1rem;">
+            <img id="lbImg" src="" alt="" style="max-width:100%;max-height:75vh;object-fit:contain;border-radius:4px;"/>
+          </div>
+          <div class="d-flex justify-content-between align-items-center p-3" style="background:rgba(0,0,0,0.7);">
+            <div style="color:rgba(255,255,255,0.4);font-size:0.75rem;" id="lbMeta"></div>
+            <div class="d-flex gap-2">
+              <button class="btn-action btn-edit" onclick="adminEditCaptionModal(window._lbPhotoId, window._lbMemId); bootstrap.Modal.getInstance(document.getElementById('photoLightboxModal')).hide()"><i class="fas fa-pen me-1"></i>Edit Caption</button>
+              <button class="btn-action btn-delete" onclick="adminDeletePhoto(window._lbPhotoId, window._lbMemId); bootstrap.Modal.getInstance(document.getElementById('photoLightboxModal')).hide()"><i class="fas fa-trash me-1"></i>Delete</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -721,11 +789,21 @@ const API_ORIGIN = API_BASE.replace('/api', '');
 const REQUIRED_ROLE = 'admin'; // This page is for admins only
 
 async function apiFetch(path, opts = {}) {
-  const headers = { 'Content-Type': 'application/json' };
-  if (AUTH_TOKEN) headers['Authorization'] = 'Bearer ' + AUTH_TOKEN;
+  // Merge caller headers with defaults; caller headers take precedence except
+  // we never send Content-Type when the body is FormData (let the browser set it).
+  const callerHeaders = opts.headers || {};
+  const headers = {
+    ...(opts.body instanceof FormData ? {} : { 'Content-Type': 'application/json' }),
+    ...(AUTH_TOKEN ? { 'Authorization': 'Bearer ' + AUTH_TOKEN } : {}),
+    ...callerHeaders,
+  };
   try {
-    const res = await fetch(API_BASE + path, { headers, ...opts });
-    return res.json();
+    const { headers: _discard, ...restOpts } = opts;
+    const res = await fetch(API_BASE + path, { headers, ...restOpts });
+    if (res.status === 401) return { success: false, message: 'Session expired – please log in again.', _status: 401 };
+    if (res.status === 403) return { success: false, message: 'Access denied (insufficient role).', _status: 403 };
+    try { return await res.json(); }
+    catch { return { success: false, message: 'Server returned an unreadable response (HTTP ' + res.status + ').', _status: res.status }; }
   } catch(e) {
     return { success: false, message: 'Network error – is the server running?' };
   }
@@ -1075,24 +1153,36 @@ async function loadAdminMemorials(search) {
 }
 function renderAdminMemorials(data) {
   const tbody = document.getElementById('memorialAdminTable');
-  tbody.innerHTML = data.map(m =>
-    '<tr>' +
+  tbody.innerHTML = data.map(m => {
+    const photoCount = m.photo_count !== undefined ? m.photo_count : '—';
+    const photoBtn = photoCount > 0
+      ? '<button class="btn-action" style="background:#dbeafe;color:#1e40af;font-size:0.68rem;" onclick="showPage(\'photo-mod\');setTimeout(()=>{const f=document.getElementById(\'photoModMemFilter\');if(f){f.value=\'' + m.id + '\';filterPhotoMod();}},400);"><i class="fas fa-images me-1"></i>' + photoCount + '</button>'
+      : '<span style="font-size:0.78rem;color:var(--muted);">0</span>';
+    return '<tr>' +
     '<td style="color:var(--muted);font-size:0.78rem;">#' + m.id + '</td>' +
     '<td style="font-weight:700;">' + m.name + '</td>' +
     '<td style="font-size:0.83rem;">' + (m.born ? new Date(m.born).getFullYear() : '—') + '</td>' +
     '<td style="font-size:0.83rem;">' + (m.died ? new Date(m.died).getFullYear() : '—') + '</td>' +
     '<td style="font-weight:700;color:var(--gold);">🕯️ ' + m.candles + '</td>' +
+    '<td>' + photoBtn + '</td>' +
     '<td><button class="btn-qr-admin" onclick="adminShowQR(' + m.id + ')"><i class="fas fa-qrcode me-1"></i>View QR</button></td>' +
     '<td><div class="d-flex gap-1">' +
     '<button class="btn-action btn-view2" onclick="window.open(\'memorial.html?memorial=' + m.id + '\',\'_blank\')" title="View memorial page"><i class="fas fa-external-link-alt"></i></button>' +
     '<button class="btn-action btn-delete" onclick="deleteMemorial(' + m.id + ')" title="Delete memorial"><i class="fas fa-trash"></i></button>' +
-    '</div></td></tr>').join('');
+    '</div></td></tr>';
+  }).join('');
 }
 function filterAdminMemorials(q) { loadAdminMemorials(q); }
 async function saveMemorial() {
   const name = document.getElementById('m_name').value.trim();
   if (!name) { showToast('Name is required.'); return; }
-  const body = { name, born: document.getElementById('m_born').value||null, died: document.getElementById('m_died').value||null, quote: document.getElementById('m_quote').value||'' };
+  const body = {
+    name,
+    born:      document.getElementById('m_born').value  || null,
+    died:      document.getElementById('m_died').value  || null,
+    quote:     document.getElementById('m_quote').value || '',
+    branch_id: CURRENT_USER ? (CURRENT_USER.branch_id || null) : null
+  };
   const result = await apiFetch('/memorials', { method: 'POST', body: JSON.stringify(body) });
   if (result.success) { loadAdminMemorials(); bootstrap.Modal.getInstance(document.getElementById('memModal')).hide(); showToast('✅ Memorial added!'); }
   else showToast('❌ ' + (result.message||'Failed.'));
@@ -1107,40 +1197,120 @@ async function deleteMemorial(id) {
 
 // ── PHOTO MODERATION ──────────────────────────────────────────────────────────
 let _photoModCache = [];
+let _captionEditPhotoId = null;
+let _captionEditMemId   = null;
 
 async function loadPhotoMod() {
   const grid = document.getElementById('photoModGrid');
-  grid.innerHTML = '<div class="col-12 text-center" style="color:var(--muted);padding:2rem;"><div class="spinner-border spinner-border-sm me-2"></div>Loading photos...</div>';
-  const { success, data } = await apiFetch('/memorials/photos/all');
-  if (!success) { grid.innerHTML = '<div class="col-12 text-center" style="color:var(--muted);padding:2rem;">Could not load photos.</div>'; return; }
-  _photoModCache = data;
-  renderPhotoMod(data);
-  // Update badge
+  grid.innerHTML = '<div class="col-12 text-center" style="color:var(--muted);padding:2rem;"><div class="spinner-border spinner-border-sm me-2"></div>Loading photos…</div>';
+
+  const result = await apiFetch('/memorials/photos/all');
+  const { success, data } = result;
+  if (!success) {
+    // Bug 5 fix: reset stale cache and badge/stats on any failure
+    _photoModCache = [];
+    const badge5 = document.getElementById('photoModBadge');
+    if (badge5) badge5.style.display = 'none';
+    const statsRow5 = document.getElementById('photoModStats');
+    if (statsRow5) statsRow5.style.setProperty('display', 'none', 'important');
+    const errMsg = result._status === 401 ? 'Session expired – please refresh and log in again.'
+                 : result._status === 403 ? 'Access denied. Admin role required.'
+                 : (result.message || 'Could not load photos. Check server connection.');
+    grid.innerHTML = '<div class="col-12 text-center" style="color:var(--muted);padding:2rem;"><i class="fas fa-exclamation-circle me-2" style="color:var(--danger);"></i>' + escHtml(errMsg) + '</div>';
+    return;
+  }
+  _photoModCache = Array.isArray(data) ? data : [];
+
+  // Bug 4 fix: use memorial_id as option value so filter is immune to
+  // HTML-special characters in memorial names (&, ', <, >).
+  const memFilter = document.getElementById('photoModMemFilter');
+  if (memFilter) {
+    const memMap = {};
+    _photoModCache.forEach(p => { memMap[p.memorial_id] = p.memorial_name || 'Unknown'; });
+    const sorted = Object.entries(memMap).sort((a, b) => a[1].localeCompare(b[1]));
+    const prevId = memFilter.value;
+    memFilter.innerHTML = '<option value="">All Memorials</option>' +
+      sorted.map(([id, name]) => '<option value="' + id + '"' + (prevId === String(id) ? ' selected' : '') + '>' + escHtml(name) + '</option>').join('');
+  }
+
+  // Badge: show count
   const badge = document.getElementById('photoModBadge');
-  if (data.length > 0) { badge.textContent = data.length; badge.style.display = 'inline-block'; }
+  if (_photoModCache.length > 0) { badge.textContent = _photoModCache.length; badge.style.display = 'inline-block'; }
   else badge.style.display = 'none';
+
+  // Stats
+  const statsRow = document.getElementById('photoModStats');
+  if (statsRow) {
+    statsRow.style.setProperty('display', _photoModCache.length ? 'flex' : 'none', 'important');
+    const el1 = document.getElementById('pmTotalCount');
+    const el2 = document.getElementById('pmMemCount');
+    if (el1) el1.textContent = _photoModCache.length;
+    if (el2) el2.textContent = new Set(_photoModCache.map(p => p.memorial_id)).size;
+  }
+
+  filterPhotoMod();
+}
+
+function filterPhotoMod() {
+  const q    = (document.getElementById('photoModSearch')?.value || '').toLowerCase();
+  const mem  = document.getElementById('photoModMemFilter')?.value || '';
+  let filtered = _photoModCache;
+  if (mem)  filtered = filtered.filter(p => String(p.memorial_id) === mem);
+  if (q)    filtered = filtered.filter(p =>
+    (p.memorial_name||'').toLowerCase().includes(q) ||
+    (p.caption||'').toLowerCase().includes(q) ||
+    (p.uploaded_by||'').toLowerCase().includes(q));
+  const countEl = document.getElementById('photoModCount');
+  if (countEl) countEl.textContent = filtered.length + ' of ' + _photoModCache.length + ' photos';
+  renderPhotoMod(filtered);
+}
+
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
 }
 
 function renderPhotoMod(data) {
   const grid = document.getElementById('photoModGrid');
   if (!data.length) {
-    grid.innerHTML = '<div class="col-12 text-center" style="color:var(--muted);padding:3rem;"><i class="fas fa-images" style="font-size:2rem;margin-bottom:0.5rem;display:block;"></i>No memorial photos uploaded yet.</div>';
+    grid.innerHTML = '<div class="col-12 text-center" style="color:var(--muted);padding:3rem;">' +
+      '<i class="fas fa-images" style="font-size:2.5rem;margin-bottom:0.8rem;display:block;opacity:0.35;"></i>' +
+      '<div style="font-size:0.9rem;">No photos found.</div>' +
+      '<div style="font-size:0.78rem;margin-top:0.3rem;">Photos uploaded by visitors on memorial pages will appear here.</div></div>';
     return;
   }
   grid.innerHTML = data.map(p => {
-    const uploaded = p.created_at ? new Date(p.created_at).toLocaleDateString('en-PH', {year:'numeric',month:'short',day:'numeric'}) : '';
-    return '<div class="col-6 col-md-4 col-lg-3" id="photo-mod-item-' + p.id + '">' +
+    const uploaded = p.created_at
+      ? new Date(p.created_at).toLocaleDateString('en-PH', {year:'numeric',month:'short',day:'numeric'})
+      : '';
+    const memUrl = 'memorial.html?memorial=' + p.memorial_id;
+    const capHtml = p.caption
+      ? '<span style="color:var(--text);">"' + escHtml(p.caption) + '"</span>'
+      : '<span style="color:var(--muted);font-style:normal;">No caption</span>';
+    return (
+      '<div class="col-6 col-md-4 col-lg-3" id="photo-mod-item-' + p.id + '">' +
       '<div class="photo-mod-card">' +
-      '<img class="photo-mod-img" src="' + p.photo_url + '" alt="' + (p.caption||'') + '" onclick="adminLightbox(\'' + p.photo_url.replace(/'/g,"\\'") + '\')" title="Click to enlarge"/>' +
-      '<div class="photo-mod-body">' +
-      '<div class="photo-mod-memorial"><i class="fas fa-heart me-1" style="color:var(--gold);font-size:0.7rem;"></i>' + (p.memorial_name || 'Unknown memorial') + '</div>' +
-      '<div class="photo-mod-caption" id="cap-text-' + p.id + '">' + (p.caption ? '"' + p.caption + '"' : '<span style="color:var(--muted);font-style:normal;">No caption</span>') + '</div>' +
-      '<div class="photo-mod-meta">By: ' + (p.uploaded_by||'Anonymous') + ' · ' + uploaded + '</div>' +
-      '<div class="photo-mod-actions">' +
-      '<button class="btn-action btn-edit" style="flex:1;" onclick="adminEditCaption(' + p.id + ',' + p.memorial_id + ')"><i class="fas fa-pen me-1"></i>Edit Caption</button>' +
-      '<button class="btn-action btn-delete" onclick="adminDeletePhoto(' + p.id + ',' + p.memorial_id + ')"><i class="fas fa-trash"></i></button>' +
+      '<div style="position:relative;overflow:hidden;aspect-ratio:4/3;background:var(--cream);cursor:pointer;" onclick="adminOpenLightbox(' + p.id + ')">' +
+      '<img class="photo-mod-img" src="' + escHtml(API_ORIGIN + p.photo_url) + '" alt="' + escHtml(p.caption||'') + '" ' +
+        'style="transition:transform 0.2s;" ' +
+        'onmouseover="this.style.transform=\'scale(1.04)\'" onmouseout="this.style.transform=\'\'" ' +
+        'onerror="this.src=\'data:image/svg+xml,<svg xmlns=\\\'http://www.w3.org/2000/svg\\\' width=\\\'80\\\' height=\\\'80\\\'><rect width=\\\'80\\\' height=\\\'80\\\' fill=\\\'%23f0ebe3\\\'/><text x=\\\'50%25\\\' y=\\\'55%25\\\' font-size=\\\'28\\\' text-anchor=\\\'middle\\\' fill=\\\'%23aaa\\\'>🖼</text></svg>\';this.style.objectFit=\\\'contain\\\'"/>' +
+      '<div style="position:absolute;bottom:6px;right:6px;background:rgba(0,0,0,0.55);border-radius:4px;padding:2px 6px;font-size:0.65rem;color:#fff;"><i class="fas fa-expand-alt me-1"></i>View</div>' +
       '</div>' +
-      '</div></div></div>';
+      '<div class="photo-mod-body">' +
+      '<div class="photo-mod-memorial">' +
+        '<i class="fas fa-heart me-1" style="color:var(--gold);font-size:0.7rem;"></i>' +
+        '<a href="' + memUrl + '" target="_blank" style="color:var(--navy);font-weight:700;font-size:0.8rem;text-decoration:none;" title="Open memorial page">' +
+          escHtml(p.memorial_name || 'Unknown memorial') +
+        ' <i class="fas fa-external-link-alt" style="font-size:0.6rem;opacity:0.5;"></i></a>' +
+      '</div>' +
+      '<div class="photo-mod-caption" id="cap-text-' + p.id + '">' + capHtml + '</div>' +
+      '<div class="photo-mod-meta">By: ' + escHtml(p.uploaded_by||'Anonymous') + (uploaded ? ' · ' + uploaded : '') + '</div>' +
+      '<div class="photo-mod-actions">' +
+      '<button class="btn-action btn-edit" style="flex:1;" onclick="adminEditCaptionModal(' + p.id + ',' + p.memorial_id + ')"><i class="fas fa-pen me-1"></i>Edit Caption</button>' +
+      '<button class="btn-action btn-delete" onclick="adminDeletePhoto(' + p.id + ',' + p.memorial_id + ')" title="Delete photo"><i class="fas fa-trash"></i></button>' +
+      '</div>' +
+      '</div></div></div>'
+    );
   }).join('');
 }
 
@@ -1149,45 +1319,97 @@ async function adminDeletePhoto(photoId, memId) {
   const result = await apiFetch('/memorials/' + memId + '/photos/' + photoId, { method: 'DELETE' });
   if (result.success) {
     const el = document.getElementById('photo-mod-item-' + photoId);
-    if (el) el.remove();
+    if (el) { el.style.transition = 'opacity 0.3s'; el.style.opacity = '0'; setTimeout(() => el.remove(), 300); }
     _photoModCache = _photoModCache.filter(p => p.id !== photoId);
+    // refresh badge & stats
     const badge = document.getElementById('photoModBadge');
     if (_photoModCache.length > 0) badge.textContent = _photoModCache.length;
     else badge.style.display = 'none';
+    const el1 = document.getElementById('pmTotalCount'); if (el1) el1.textContent = _photoModCache.length;
+    const el2 = document.getElementById('pmMemCount'); if (el2) el2.textContent = new Set(_photoModCache.map(p => p.memorial_id)).size;
     showToast('🗑️ Photo deleted.');
   } else {
     showToast('❌ ' + (result.message || 'Delete failed.'));
   }
 }
 
-async function adminEditCaption(photoId, memId) {
+// Open the caption edit modal (replaces old prompt())
+function adminEditCaptionModal(photoId, memId) {
   const photo = _photoModCache.find(p => p.id === photoId);
-  const current = photo ? (photo.caption || '') : '';
-  const newCaption = prompt('Edit caption (leave blank to remove):', current);
-  if (newCaption === null) return;
+  if (!photo) return;
+  _captionEditPhotoId = photoId;
+  _captionEditMemId   = memId;
+
+  const imgEl   = document.getElementById('captionModalImg');
+  const inputEl = document.getElementById('captionModalInput');
+  const metaEl  = document.getElementById('captionModalMeta');
+
+  if (imgEl)   { imgEl.src = API_ORIGIN + photo.photo_url; imgEl.onerror = () => { imgEl.style.display='none'; }; }
+  if (inputEl) inputEl.value = photo.caption || '';
+  if (metaEl) {
+    const uploaded = photo.created_at ? new Date(photo.created_at).toLocaleDateString('en-PH', {year:'numeric',month:'short',day:'numeric'}) : '';
+    metaEl.innerHTML =
+      '<i class="fas fa-heart me-1" style="color:var(--gold);"></i><strong>' + escHtml(photo.memorial_name || 'Unknown') + '</strong>' +
+      ' · By: ' + escHtml(photo.uploaded_by||'Anonymous') + (uploaded ? ' · ' + uploaded : '');
+  }
+
+  new bootstrap.Modal(document.getElementById('captionModal')).show();
+}
+
+async function saveCaptionModal() {
+  const inputEl  = document.getElementById('captionModalInput');
+  const newCaption = inputEl ? inputEl.value.trim() : '';
+  const photoId  = _captionEditPhotoId;
+  const memId    = _captionEditMemId;
+  if (photoId === null) return;
+
   const result = await apiFetch('/memorials/' + memId + '/photos/' + photoId, {
     method: 'PUT',
-    body: JSON.stringify({ caption: newCaption.trim() })
+    body: JSON.stringify({ caption: newCaption })
   });
   if (result.success) {
-    if (photo) photo.caption = newCaption.trim() || null;
+    const photo = _photoModCache.find(p => p.id === photoId);
+    if (photo) photo.caption = newCaption || null;
     const capEl = document.getElementById('cap-text-' + photoId);
-    if (capEl) capEl.innerHTML = newCaption.trim()
-      ? '"' + newCaption.trim() + '"'
+    if (capEl) capEl.innerHTML = newCaption
+      ? '<span style="color:var(--text);">"' + escHtml(newCaption) + '"</span>'
       : '<span style="color:var(--muted);font-style:normal;">No caption</span>';
+    bootstrap.Modal.getInstance(document.getElementById('captionModal'))?.hide();
     showToast('✅ Caption updated.');
   } else {
     showToast('❌ ' + (result.message || 'Update failed.'));
   }
 }
 
+// Open photo in the proper Bootstrap lightbox modal
+function adminOpenLightbox(photoId) {
+  const photo = _photoModCache.find(p => p.id === photoId);
+  if (!photo) return;
+  window._lbPhotoId = photoId;
+  window._lbMemId   = photo.memorial_id;
+
+  const lbImg     = document.getElementById('lbImg');
+  const lbMemName = document.getElementById('lbMemName');
+  const lbCaption = document.getElementById('lbCaption');
+  const lbMeta    = document.getElementById('lbMeta');
+
+  if (lbImg)     { lbImg.src = API_ORIGIN + photo.photo_url; lbImg.onerror = () => {}; }
+  if (lbMemName) lbMemName.textContent = photo.memorial_name || 'Unknown memorial';
+  if (lbCaption) lbCaption.textContent = photo.caption ? '"' + photo.caption + '"' : 'No caption';
+  if (lbMeta) {
+    const uploaded = photo.created_at ? new Date(photo.created_at).toLocaleDateString('en-PH', {year:'numeric',month:'short',day:'numeric'}) : '';
+    lbMeta.textContent = 'By: ' + (photo.uploaded_by||'Anonymous') + (uploaded ? ' · ' + uploaded : '');
+  }
+
+  new bootstrap.Modal(document.getElementById('photoLightboxModal')).show();
+}
+
+// Keep old adminLightbox as fallback (unused but safe to keep)
 function adminLightbox(src) {
-  // Simple lightbox using existing admin toast area
   const overlay = document.createElement('div');
   overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:9999;display:flex;align-items:center;justify-content:center;cursor:pointer;';
   overlay.onclick = () => document.body.removeChild(overlay);
-  overlay.innerHTML = '<img src="' + src + '" style="max-width:90vw;max-height:90vh;border-radius:8px;object-fit:contain;"/>' +
-    '<button style="position:absolute;top:16px;right:20px;background:none;border:none;color:white;font-size:1.6rem;cursor:pointer;">&times;</button>';
+  overlay.innerHTML = '<img src="' + src + '" style="max-width:90vw;max-height:90vh;border-radius:8px;object-fit:contain;"/>';
   document.body.appendChild(overlay);
 }
 // ── CALENDAR ──────────────────────────────────────────────────────────────────
